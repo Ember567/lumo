@@ -10,6 +10,19 @@ import {
 } from '../../lib/coach.js'
 import LumiFace from './LumiFace.jsx'
 
+const SECTION_LABELS = { overview: 'Zur Übersicht', learning: 'Zum Lernen', quiz: 'Zu den Abfragen', planner: 'Zum Planer', organisation: 'Zur Organisation' }
+
+// Knopfbeschriftung: von der KI, sonst sinnvoll aus der Aktion abgeleitet.
+function withLabel(a) {
+  const generic = !a.label || /^(öffnen|los|start|ok)$/i.test(a.label.trim())
+  if (!generic) return a
+  const label = a.type === 'start_quiz' && a.target ? `${a.target.title} abfragen`
+    : a.type === 'start_subject_quiz' && a.target ? `${a.target.name} abfragen`
+      : a.type === 'open_section' ? SECTION_LABELS[a.section] || 'Öffnen'
+        : a.type === 'add_task' ? 'Aufgabe anlegen' : 'Öffnen'
+  return { ...a, label }
+}
+
 // Einfache, sichere Darstellung: "- " → Liste, **x** → fett. Kein HTML.
 function RichText({ text }) {
   const inline = s => s.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
@@ -112,9 +125,14 @@ export default function CoachWidget({ userId, section, onNavigate, onStartQuiz }
       if (fresh !== state) setState(fresh)
       const data = await askLumi(next.slice(-12), contextFor(fresh, section))
       // Kürzel → echte Objekte, sobald die Antwort da ist (Kontext kann sich später ändern).
-      const actions = (data.actions || []).map(a => ({ ...a, target: a.ref ? fresh.refs[a.ref] : null }))
+      const actions = (data.actions || []).map(a => withLabel({ ...a, target: a.ref ? fresh.refs[a.ref] : null }))
         .filter(a => !['start_quiz', 'start_subject_quiz'].includes(a.type) || a.target)
-      setMessages(list => [...list, { role: 'assistant', content: data.reply, mood: data.mood, actions, at: Date.now() }])
+      // Falls die KI doch ein Kürzel in den Text schreibt: durch den Namen ersetzen.
+      const reply = data.reply.replace(/\[?\b([TS]\d{1,3})\b\]?/g, (m, key) => {
+        const obj = fresh.refs[key]
+        return obj ? (obj.title || obj.name) : m
+      })
+      setMessages(list => [...list, { role: 'assistant', content: reply, mood: data.mood, actions, at: Date.now() }])
       setReplyMood(data.mood)
       if (typeof data.remaining === 'number') setRemaining(data.remaining)
     } catch (err) {

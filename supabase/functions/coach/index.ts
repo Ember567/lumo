@@ -73,7 +73,8 @@ Aktionen (höchstens 3, nur wenn sie wirklich helfen, sonst leere Liste):
 - open_section: Bereich öffnen. section = overview | learning | quiz | planner | organisation.
 - add_task: Aufgabe vorschlagen. title = kurzer Titel, due_date = YYYY-MM-DD oder "".
 label ist die Beschriftung des Knopfs (2–5 Wörter, z.B. "Ableitungen abfragen"). Nicht benötigte Felder sind "".
-Verwende nur Kürzel, die im Kontext vorkommen.
+Verwende nur Kürzel, die im Kontext vorkommen. Die Kürzel sind nur für ref gedacht: In reply und label nennst du
+Themen und Fächer immer beim Namen, nie mit Kürzel.
 
 mood ist dein Gesichtsausdruck passend zur Antwort:
 happy (freundlich), proud (Person hat etwas geschafft), thinking (Erklärung, Überlegung), cheer (anfeuern),
@@ -196,7 +197,6 @@ function parseReply(raw: string): { reply: string; mood: string; actions: Action
       (type === 'add_task' && action.title.length > 0)
     if (!ok) continue
     if (type === 'add_task' && !/^\d{4}-\d{2}-\d{2}$/.test(action.due_date)) action.due_date = ''
-    if (!action.label) action.label = type === 'add_task' ? 'Aufgabe anlegen' : 'Öffnen'
     actions.push(action)
     if (actions.length === 3) break
   }
