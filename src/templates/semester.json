@@ -1,0 +1,41 @@
+{
+ "id": "semester",
+ "name": "Beispiel: Semesterprüfungen",
+ "description": "Kleiner Beispielplan mit drei Fächern, drei Phasen (Erarbeiten, Wiederholen, Prüfungen) und einem Stundenziel fürs Sprachtraining. Gut zum Ausprobieren.",
+ "anchorDate": "2026-01-05",
+ "startsNextMonday": true,
+ "goals": [
+  { "key": "g1", "name": "Semesterprüfungen", "kind": "topics", "exam_date": "2026-04-06", "color": "blue" },
+  { "key": "g2", "name": "Englisch-Training", "kind": "hours", "exam_date": "2026-04-06", "target_hours": 40, "color": "sage" }
+ ],
+ "phases": [
+  { "key": "ph1", "name": "Erarbeiten", "start_date": "2026-01-05", "end_date": "2026-03-01", "description": "Neuen Stoff Thema für Thema durcharbeiten." },
+  { "key": "ph2", "name": "Wiederholen", "start_date": "2026-03-02", "end_date": "2026-03-22", "description": "Alte Prüfungen lösen, Lücken schliessen." },
+  { "key": "ph3", "name": "Prüfungen", "start_date": "2026-03-23", "end_date": "2026-04-10", "description": "Prüfungsphase." }
+ ],
+ "subjects": [
+  { "key": "su1", "name": "Mathematik", "priority": "hoch", "goal": "g1", "sort_order": 0 },
+  { "key": "su2", "name": "Informatik", "priority": "mittel", "goal": "g1", "sort_order": 1 },
+  { "key": "su3", "name": "Wirtschaft", "priority": "niedrig", "goal": "g1", "sort_order": 2 }
+ ],
+ "topics": [
+  { "key": "t1", "subject": "su1", "phase": "ph1", "category": "Analysis", "title": "Funktionen und Grenzwerte", "sort_order": 1, "subtasks": ["Theorie zusammenfassen", "Übungsserie 1 lösen"] },
+  { "key": "t2", "subject": "su1", "phase": "ph1", "category": "Analysis", "title": "Ableitungen", "sort_order": 2, "subtasks": ["Regeln lernen", "Übungsserie 2 lösen"] },
+  { "key": "t3", "subject": "su1", "phase": "ph1", "category": "Analysis", "title": "Integrale", "sort_order": 3, "subtasks": [] },
+  { "key": "t4", "subject": "su1", "phase": "ph2", "category": "Prüfungsvorbereitung", "title": "Alte Prüfungen lösen", "sort_order": 4, "subtasks": [] },
+  { "key": "t5", "subject": "su2", "phase": "ph1", "category": "Programmieren", "title": "Datenstrukturen", "sort_order": 1, "subtasks": ["Listen und Arrays", "Bäume", "Hash-Tabellen"] },
+  { "key": "t6", "subject": "su2", "phase": "ph1", "category": "Programmieren", "title": "Algorithmen", "sort_order": 2, "subtasks": ["Sortieren", "Suchen"] },
+  { "key": "t7", "subject": "su2", "phase": "ph2", "category": null, "title": "Projektabgabe vorbereiten", "sort_order": 3, "subtasks": [] },
+  { "key": "t8", "subject": "su3", "phase": "ph1", "category": null, "title": "Buchhaltung Grundlagen", "sort_order": 1, "subtasks": [] },
+  { "key": "t9", "subject": "su3", "phase": "ph1", "category": null, "title": "Marketing-Mix", "sort_order": 2, "subtasks": [] }
+ ],
+ "weeks": [
+  { "start_date": "2026-01-05", "end_date": "2026-01-11", "phase": "ph1", "primary_subject": "su1", "primary_focus": "Mathematik: Funktionen und Grenzwerte", "primary_topics": ["t1"], "secondary_subject": "su2", "secondary_focus": "Informatik: Datenstrukturen", "secondary_topics": ["t5"], "note": null, "is_buffer_week": false },
+  { "start_date": "2026-01-12", "end_date": "2026-01-18", "phase": "ph1", "primary_subject": "su1", "primary_focus": "Mathematik: Ableitungen", "primary_topics": ["t2"], "secondary_subject": "su3", "secondary_focus": "Wirtschaft: Buchhaltung", "secondary_topics": ["t8"], "note": null, "is_buffer_week": false }
+ ],
+ "deadlines": [
+  { "title": "Prüfungsanmeldung", "date": "2026-02-15", "end_date": null, "description": null, "critical": true },
+  { "title": "Projektabgabe Informatik", "date": "2026-03-20", "end_date": null, "description": null, "critical": false }
+ ],
+ "links": []
+}

@@ -1,0 +1,21 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-08-27T13:47:09.479Z",
+        "reason": "user confirmed: chose 'Voll Notion-Sans' (Inter/system stack) as the body face for the warm-Notion redesign, paired with Caveat as the handwritten display face"
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": ["src/style.css"],
+        "createdAt": "2026-08-27T13:47:09.643Z",
+        "reason": "impeccable: layout-transition has no matchable value, so scoped wildcard. All occurrences in style.css are the sidebar collapse toggle (genuinely reflows content width) and progress-bar fill widths (.vbar-fill/.subject-progress-fill/.topic-progress-fill/.weekly-focus-progress-fill/.weekly-focus-progress) where transform:scaleX distorts the radius; all one-shot, bounded, and disabled under prefers-reduced-motion"
+      }
+    ]
+  }
+}

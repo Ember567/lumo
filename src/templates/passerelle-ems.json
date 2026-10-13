@@ -1,0 +1,2021 @@
+{
+ "id": "passerelle-ems",
+ "name": "Passerelle + EMS (Schweiz)",
+ "description": "Ergänzungsprüfung Passerelle und Eignungstest Medizinstudium: 8 Fächer, 110 Themen nach den SBFI-Richtlinien 2023, 6 Phasen, 27 Wochenschwerpunkte und alle Fristen.",
+ "anchorDate": "2026-08-24",
+ "goals": [
+  {
+   "key": "g1",
+   "name": "Passerelle",
+   "kind": "topics",
+   "exam_date": "2027-08-09",
+   "color": "ink"
+  },
+  {
+   "key": "g2",
+   "name": "EMS",
+   "kind": "hours",
+   "exam_date": "2027-07-09",
+   "target_hours": 280,
+   "color": "amber"
+  }
+ ],
+ "phases": [
+  {
+   "key": "ph1",
+   "name": "Fundament",
+   "start_date": "2026-08-24",
+   "end_date": "2027-01-31",
+   "description": "Einzige Phase mit Lernzeit unter der Woche. 12–15 h/Woche. Hier wird der Erfolg entschieden."
+  },
+  {
+   "key": "ph2",
+   "name": "Bonus-Block",
+   "start_date": "2027-02-01",
+   "end_date": "2027-02-14",
+   "description": "Job vorbei, RS noch nicht gestartet. Intensivblock schwächstes Fach + EMS-Voranmeldung (15.02.2027)."
+  },
+  {
+   "key": "ph3",
+   "name": "RS",
+   "start_date": "2027-02-15",
+   "end_date": "2027-06-18",
+   "description": "Kein neuer Stoff. Nur Wiederholen/Festigen. Nur Wochenenden + Handy-Häppchen."
+  },
+  {
+   "key": "ph4",
+   "name": "EMS-Endspurt",
+   "start_date": "2027-06-18",
+   "end_date": "2027-07-09",
+   "description": "Volle Simulationen, gezieltes Training schwächster EMS-Untertests."
+  },
+  {
+   "key": "ph5",
+   "name": "Passerelle schriftlich",
+   "start_date": "2027-07-10",
+   "end_date": "2027-08-08",
+   "description": "Vollzeit: Naturwiss. → Geistes-/Sozialwiss. → Mathe/Deutsch → Vollsimulation."
+  },
+  {
+   "key": "ph6",
+   "name": "Mündliche Prüfungen",
+   "start_date": "2027-08-14",
+   "end_date": "2027-09-04",
+   "description": "Deutsch, Englisch, Mathematik mündlich (Mathe ohne Vorbereitungszeit!)."
+  }
+ ],
+ "subjects": [
+  {
+   "key": "su5",
+   "name": "Biologie",
+   "priority": "sehr hoch",
+   "goal": "g1",
+   "sort_order": 0
+  },
+  {
+   "key": "su6",
+   "name": "Geografie",
+   "priority": "sehr hoch",
+   "goal": "g1",
+   "sort_order": 1
+  },
+  {
+   "key": "su3",
+   "name": "Chemie",
+   "priority": "hoch",
+   "goal": "g1",
+   "sort_order": 2
+  },
+  {
+   "key": "su7",
+   "name": "Deutsch",
+   "priority": "hoch",
+   "goal": "g1",
+   "sort_order": 3
+  },
+  {
+   "key": "su8",
+   "name": "Englisch/2. Sprache",
+   "priority": "hoch",
+   "goal": "g1",
+   "sort_order": 4
+  },
+  {
+   "key": "su2",
+   "name": "Mathematik",
+   "priority": "mittel",
+   "goal": "g1",
+   "sort_order": 5
+  },
+  {
+   "key": "su4",
+   "name": "Geschichte",
+   "priority": "mittel",
+   "goal": "g1",
+   "sort_order": 6
+  },
+  {
+   "key": "su1",
+   "name": "Physik",
+   "priority": "niedrig",
+   "goal": "g1",
+   "sort_order": 7
+  }
+ ],
+ "topics": [
+  {
+   "key": "t1",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "a) Mechanik",
+   "title": "Kinematik",
+   "sort_order": 1,
+   "subtasks": [
+    "Berechnungen mit geradlinigen Bewegungen (konstante Geschwindigkeit und gleichförmige Beschleunigung) anstellen, insbesondere mit freiem Fall und senkrechtem Wurf"
+   ]
+  },
+  {
+   "key": "t2",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "a) Mechanik",
+   "title": "Masse und Dichte",
+   "sort_order": 2,
+   "subtasks": [
+    "Masse als Mass der Trägheit und der Schwere der Körper definieren sowie die Dichte erklären"
+   ]
+  },
+  {
+   "key": "t3",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "a) Mechanik",
+   "title": "Kräfte",
+   "sort_order": 3,
+   "subtasks": [
+    "Zusammenhang zwischen Kraft, Masse und Beschleunigung mithilfe der Newton-Axiome formulieren und auf alltägliche Situationen anwenden",
+    "Gewichtskraft und Reibungskräfte beschreiben und berechnen"
+   ]
+  },
+  {
+   "key": "t4",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "a) Mechanik",
+   "title": "Statik",
+   "sort_order": 4,
+   "subtasks": [
+    "Kräftegleichgewichte in einfachen Situationen berechnen"
+   ]
+  },
+  {
+   "key": "t5",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "a) Mechanik",
+   "title": "Arbeit und Leistung",
+   "sort_order": 5,
+   "subtasks": [
+    "Arbeit und Leistung definieren",
+    "Mit Hubarbeit, Beschleunigungsarbeit und Reibungsarbeit rechnen",
+    "Begriff des Wirkungsgrades erklären"
+   ]
+  },
+  {
+   "key": "t6",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "a) Mechanik",
+   "title": "Energie",
+   "sort_order": 6,
+   "subtasks": [
+    "Kinetische und potentielle Energie definieren",
+    "Grundsatz der Energieerhaltung erklären und anwenden"
+   ]
+  },
+  {
+   "key": "t7",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "a) Mechanik",
+   "title": "Hydrostatik",
+   "sort_order": 7,
+   "subtasks": [
+    "Druck definieren und in einer Flüssigkeit seine Abhängigkeit von der Tiefe berechnen",
+    "Archimedisches Gesetz formulieren und auf teilweise oder ganz eingetauchte Körper anwenden"
+   ]
+  },
+  {
+   "key": "t8",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "b) Wärmelehre",
+   "title": "Temperatur",
+   "sort_order": 8,
+   "subtasks": [
+    "Begriff der Temperatur erklären",
+    "Celsius- und Kelvinskala definieren"
+   ]
+  },
+  {
+   "key": "t9",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "b) Wärmelehre",
+   "title": "Ausdehnung",
+   "sort_order": 9,
+   "subtasks": [
+    "Lineare thermische Ausdehnung und Volumenausdehnung eines Materials berechnen",
+    "Funktionsweise eines Thermometers erklären"
+   ]
+  },
+  {
+   "key": "t10",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "b) Wärmelehre",
+   "title": "Wärme",
+   "sort_order": 10,
+   "subtasks": [
+    "Begriffe Wärme und Temperatur unterscheiden"
+   ]
+  },
+  {
+   "key": "t11",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "b) Wärmelehre",
+   "title": "Spezifische Wärmekapazität",
+   "sort_order": 11,
+   "subtasks": [
+    "Spezifische Wärmekapazität definieren und damit Berechnungen anstellen"
+   ]
+  },
+  {
+   "key": "t12",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "b) Wärmelehre",
+   "title": "Hauptsätze",
+   "sort_order": 12,
+   "subtasks": [
+    "Ersten und zweiten Hauptsatz der Wärmelehre formulieren und an Beispielen aus Technik und Umwelt illustrieren"
+   ]
+  },
+  {
+   "key": "t13",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "b) Wärmelehre",
+   "title": "Wärmeübertragung",
+   "sort_order": 13,
+   "subtasks": [
+    "Wärmeübertragungsarten beschreiben"
+   ]
+  },
+  {
+   "key": "t14",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "b) Wärmelehre",
+   "title": "Zustandsänderungen",
+   "sort_order": 14,
+   "subtasks": [
+    "Aggregatzustände der Materie und Zustandsänderungen beschreiben, Alltagsbezüge zur Umwandlungsenergie herstellen"
+   ]
+  },
+  {
+   "key": "t15",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "c) Elektrizität",
+   "title": "Elektrostatik",
+   "sort_order": 15,
+   "subtasks": [
+    "Elektrische Ladung erklären und Kräfte zwischen Ladungen berechnen",
+    "Elektrische Spannung definieren, alltägliche Spannungsquellen aufzählen und beschreiben"
+   ]
+  },
+  {
+   "key": "t16",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "c) Elektrizität",
+   "title": "Elektrischer Stromkreis: Stromstärke",
+   "sort_order": 16,
+   "subtasks": [
+    "Stromstärke als Basisgrösse des SI definieren und ihren Zusammenhang mit der elektrischen Ladung erklären"
+   ]
+  },
+  {
+   "key": "t17",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "c) Elektrizität",
+   "title": "Elektrischer Widerstand",
+   "sort_order": 17,
+   "subtasks": [
+    "Ohmsches Gesetz auf Stromkreise anwenden (Serie- und Parallelschaltung)"
+   ]
+  },
+  {
+   "key": "t18",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "c) Elektrizität",
+   "title": "Wirkungen des Stromes",
+   "sort_order": 18,
+   "subtasks": [
+    "Wärmewirkung beschreiben und die in einem Verbraucher umgesetzte Leistung berechnen",
+    "Wirkung des elektrischen Stromes auf Lebewesen beschreiben"
+   ]
+  },
+  {
+   "key": "t19",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "c) Elektrizität",
+   "title": "Magnetismus",
+   "sort_order": 19,
+   "subtasks": [
+    "Wirkungsweise von Permanentmagneten und Elektromagneten erklären",
+    "Wirkung eines Magnetfelds auf einen stromführenden Leiter qualitativ beschreiben"
+   ]
+  },
+  {
+   "key": "t20",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "d) Optik",
+   "title": "Ausbreitung des Lichts",
+   "sort_order": 20,
+   "subtasks": [
+    "Ausbreitung im freien Raum, Lichtspiegelung und Lichtbrechung beschreiben"
+   ]
+  },
+  {
+   "key": "t21",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "d) Optik",
+   "title": "Brechungsgesetz",
+   "sort_order": 21,
+   "subtasks": [
+    "Brechungsgesetz qualitativ formulieren"
+   ]
+  },
+  {
+   "key": "t22",
+   "subject": "su1",
+   "phase": "ph1",
+   "category": "d) Optik",
+   "title": "Spiegel und Linsen",
+   "sort_order": 22,
+   "subtasks": [
+    "Strahlengang bei ebenen Spiegeln und bei Linsen erklären"
+   ]
+  },
+  {
+   "key": "t23",
+   "subject": "su2",
+   "phase": "ph1",
+   "category": "Algebra",
+   "title": "Gleichungen, Ungleichungen und Systeme",
+   "sort_order": 1,
+   "subtasks": [
+    "Gleichungen und Systeme von Gleichungen ersten Grades mit zwei oder drei Variablen lösen und die Resultate diskutieren",
+    "Ungleichungen mit einer Variablen lösen",
+    "Gleichungen zweiten Grades und solche, die darauf zurückgeführt werden können, lösen"
+   ]
+  },
+  {
+   "key": "t24",
+   "subject": "su2",
+   "phase": "ph1",
+   "category": "Analysis",
+   "title": "Elementare Funktionen",
+   "sort_order": 2,
+   "subtasks": [
+    "Funktionen beschreiben (Definitionsbereich, Eigenschaften, Graphen) und folgende Funktionen verwenden: lineare/quadratische Funktionen, Polynomfunktionen, Potenzfunktionen, Wurzelfunktionen, Betragsfunktionen, Sinus-/Cosinus-/Tangensfunktionen, Exponential-/Logarithmusfunktionen, Arkusfunktionen",
+    "Summe, Differenz, Produkt und Quotient von Funktionen sowie Verkettung von Funktionen bilden",
+    "Grenzwert- und Stetigkeitsbegriff für Funktionen intuitiv darstellen und anwenden",
+    "Grenzwerte von Funktionen berechnen"
+   ]
+  },
+  {
+   "key": "t25",
+   "subject": "su2",
+   "phase": "ph1",
+   "category": "Analysis",
+   "title": "Ableitungen",
+   "sort_order": 3,
+   "subtasks": [
+    "Definition der Ableitung einer Funktion verstehen und graphisch interpretieren",
+    "Ableitung von Funktionen mit Hilfe der Ableitungsregeln (Summe, Produkt, Verkettung) bestimmen",
+    "Vollständige Kurvendiskussion (Definitionsbereich, Symmetrie, Periodizität, Asymptoten, Nullstellen, Extrema, Wendepunkte, Graph) mit Polynomfunktionen, trigonometrischen Funktionen und Exponentialfunktionen durchführen",
+    "Ableitung zur Lösung von Extremalproblemen anwenden"
+   ]
+  },
+  {
+   "key": "t26",
+   "subject": "su2",
+   "phase": "ph1",
+   "category": "Analysis",
+   "title": "Integrale",
+   "sort_order": 4,
+   "subtasks": [
+    "Inhalte von Flächen berechnen, die durch Graphen elementarer Funktionen begrenzt sind"
+   ]
+  },
+  {
+   "key": "t27",
+   "subject": "su2",
+   "phase": "ph1",
+   "category": "Geometrie",
+   "title": "Trigonometrie",
+   "sort_order": 5,
+   "subtasks": [
+    "Sinus, Cosinus und Tangens im rechtwinkligen Dreieck definieren und im Einheitskreis interpretieren, Periodizität und fundamentale Beziehungen erkennen",
+    "Einfache trigonometrische Gleichungen vom Typ sin(ax) = b auflösen",
+    "Berechnungen mit Hilfe rechtwinkliger Dreiecke ausführen"
+   ]
+  },
+  {
+   "key": "t28",
+   "subject": "su2",
+   "phase": "ph1",
+   "category": "Geometrie",
+   "title": "Vektorgeometrie 3D",
+   "sort_order": 6,
+   "subtasks": [
+    "Begriff des Vektors kennen",
+    "Vektoren addieren, subtrahieren und mit einem Skalar multiplizieren",
+    "Begriffe Linearkombination und Kollinearität von Vektoren verwenden",
+    "Komponenten und Betrag eines Vektors bestimmen",
+    "Skalarprodukt und seine Eigenschaften anwenden",
+    "Vektorprodukt berechnen, anwenden und geometrisch interpretieren",
+    "Koordinaten des Mittelpunktes einer Strecke und des Schwerpunkts eines Dreiecks bestimmen",
+    "Parametergleichung und Normalform einer Geraden in der Ebene aufstellen, Normalenvektor und Steigung bestimmen",
+    "Parametergleichung einer Geraden im Raum aufstellen, gegenseitige Lage von Geraden bestimmen",
+    "Parameter- und Koordinatengleichung einer Ebene im Raum aufstellen, Inzidenzprobleme lösen",
+    "Kartesische Kreisgleichung und Gleichung der Tangente in einem Kreispunkt aufstellen",
+    "Längen-, Winkel- und Abstandsprobleme in zwei und drei Dimensionen lösen"
+   ]
+  },
+  {
+   "key": "t29",
+   "subject": "su2",
+   "phase": "ph1",
+   "category": "Stochastik",
+   "title": "Wahrscheinlichkeitsrechnung",
+   "sort_order": 7,
+   "subtasks": [
+    "Elementare Probleme der Wahrscheinlichkeitsrechnung lösen mit: Ereignis, unvereinbare (disjunkte) Ereignisse, Gegenereignis, unabhängige Ereignisse",
+    "Vereinigung und Schnitt von Ereignissen anwenden",
+    "Ereignisbäume verwenden",
+    "Formel für die bedingte Wahrscheinlichkeit anwenden"
+   ]
+  },
+  {
+   "key": "t30",
+   "subject": "su2",
+   "phase": "ph1",
+   "category": "Stochastik",
+   "title": "Alte Passerelle-Prüfungen rechnen",
+   "sort_order": 8,
+   "subtasks": [
+    "Mischaufgaben aus Algebra, Analysis, Trigonometrie, Vektorgeometrie, Stochastik lösen",
+    "Zeitlimit simulieren (3 h schriftliche Prüfung)"
+   ]
+  },
+  {
+   "key": "t31",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "a) Stoffe",
+   "title": "Reinstoff, Gemisch",
+   "sort_order": 1,
+   "subtasks": [
+    "Begriffe Reinstoff, Gemisch, homogenes und heterogenes Stoffsystem definieren"
+   ]
+  },
+  {
+   "key": "t32",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "a) Stoffe",
+   "title": "Trennverfahren",
+   "sort_order": 2,
+   "subtasks": [
+    "Filtration, Zentrifugation, Destillation, Extraktion beschreiben und erklären"
+   ]
+  },
+  {
+   "key": "t33",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "a) Stoffe",
+   "title": "Element",
+   "sort_order": 3,
+   "subtasks": [
+    "Begriff Element definieren"
+   ]
+  },
+  {
+   "key": "t34",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "a) Stoffe",
+   "title": "Periodensystem (PSE)",
+   "sort_order": 4,
+   "subtasks": [
+    "Begriff Atommasse definieren",
+    "Unterschiede zwischen Metallen und Nichtmetallen angeben"
+   ]
+  },
+  {
+   "key": "t35",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "b) Atom- und Bindungslehre",
+   "title": "Kern-Hülle-Modell",
+   "sort_order": 5,
+   "subtasks": [
+    "Atommodell mit Kern und Elektronen beschreiben"
+   ]
+  },
+  {
+   "key": "t36",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "b) Atom- und Bindungslehre",
+   "title": "Schalenmodell",
+   "sort_order": 6,
+   "subtasks": [
+    "Schalenmodell beschreiben"
+   ]
+  },
+  {
+   "key": "t37",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "b) Atom- und Bindungslehre",
+   "title": "Massen- und Ordnungszahl",
+   "sort_order": 7,
+   "subtasks": [
+    "Zahl der Protonen, Neutronen und Elektronen eines Atoms bestimmen",
+    "Atom einem chemischen Element zuordnen (Symbol, Name)",
+    "Zahl der Valenzelektronen angeben",
+    "Kernladung angeben"
+   ]
+  },
+  {
+   "key": "t38",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "b) Atom- und Bindungslehre",
+   "title": "Lewis-Schreibweise",
+   "sort_order": 8,
+   "subtasks": [
+    "Lewis-Schreibweise der Hauptgruppenatome (Einzelelektronen und Elektronenpaare) aufstellen"
+   ]
+  },
+  {
+   "key": "t39",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "b) Atom- und Bindungslehre",
+   "title": "Kovalente Bindung und Moleküle",
+   "sort_order": 9,
+   "subtasks": [
+    "Zustandekommen einer kovalenten Bindung (Elektronenpaarbindung) zwischen Nichtmetallatomen erklären"
+   ]
+  },
+  {
+   "key": "t40",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "b) Atom- und Bindungslehre",
+   "title": "Lewis-Formeln und Skelettformeln, Oktettregel",
+   "sort_order": 10,
+   "subtasks": [
+    "Lewis-Formeln und Skelettformeln von einfachen Molekülen (ohne Radikale) zeichnen",
+    "Räumliche Lage der Atome eines Moleküls mit Hilfe eines Modells angeben"
+   ]
+  },
+  {
+   "key": "t41",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "b) Atom- und Bindungslehre",
+   "title": "Elektronegativität, Polarität und zwischenmolekulare Kräfte",
+   "sort_order": 11,
+   "subtasks": [
+    "Polarität von Elektronenpaarbindungen beurteilen, polare Moleküle und zwischenmolekulare Kräfte erkennen"
+   ]
+  },
+  {
+   "key": "t42",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "b) Atom- und Bindungslehre",
+   "title": "Ionenbindung und Salze",
+   "sort_order": 12,
+   "subtasks": [
+    "Ladung der wichtigsten einatomigen Ionen angeben und daraus Formeln der Verbindungen ableiten",
+    "Vorgänge beim Lösen eines Salzes qualitativ erklären"
+   ]
+  },
+  {
+   "key": "t43",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "b) Atom- und Bindungslehre",
+   "title": "Metallbindung und Metalle",
+   "sort_order": 13,
+   "subtasks": [
+    "Elektrische Leitfähigkeit mit einem einfachen Modell erklären"
+   ]
+  },
+  {
+   "key": "t44",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "c) Reaktionen",
+   "title": "Reaktionsgleichung",
+   "sort_order": 14,
+   "subtasks": [
+    "Reaktionsgleichungen aufstellen"
+   ]
+  },
+  {
+   "key": "t45",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "c) Reaktionen",
+   "title": "Stöchiometrie",
+   "sort_order": 15,
+   "subtasks": [
+    "Begriffe Mol (Stoffmenge), Molmasse und molare Konzentration definieren und in grundlegenden Berechnungen anwenden"
+   ]
+  },
+  {
+   "key": "t46",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "c) Reaktionen",
+   "title": "Exothermie, Endothermie",
+   "sort_order": 16,
+   "subtasks": [
+    "Exotherme und endotherme Vorgänge qualitativ erklären (Energiediagramm)"
+   ]
+  },
+  {
+   "key": "t47",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "c) Reaktionen",
+   "title": "Katalyse",
+   "sort_order": 17,
+   "subtasks": [
+    "Wirkung eines Katalysators erklären"
+   ]
+  },
+  {
+   "key": "t48",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "c) Reaktionen",
+   "title": "Protonenspender, Protonenempfänger",
+   "sort_order": 18,
+   "subtasks": [
+    "Säuren und Basen als Protonenspender und Protonenempfänger nach Brønsted definieren"
+   ]
+  },
+  {
+   "key": "t49",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "c) Reaktionen",
+   "title": "Protolysegleichgewichte",
+   "sort_order": 19,
+   "subtasks": [
+    "Qualitative Gleichgewichte zwischen Säuren und Basen mit Hilfe der Säure/Base-Tabelle formulieren und diskutieren"
+   ]
+  },
+  {
+   "key": "t50",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "c) Reaktionen",
+   "title": "pH",
+   "sort_order": 20,
+   "subtasks": [
+    "Saure, neutrale und basische Lösungen auf der pH-Skala einordnen"
+   ]
+  },
+  {
+   "key": "t51",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "c) Reaktionen",
+   "title": "Indikatoren",
+   "sort_order": 21,
+   "subtasks": [
+    "Funktionsweise von pH-Indikatoren qualitativ beschreiben, ohne auf ihre Struktur einzugehen"
+   ]
+  },
+  {
+   "key": "t52",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "c) Reaktionen",
+   "title": "Redox-Reaktionen, Verbrennungen",
+   "sort_order": 22,
+   "subtasks": [
+    "Oxidation und Reduktion definieren und mit Hilfe von Oxidationszahlen als Elektronenverschiebung identifizieren, resultierende Teilreaktionen darstellen",
+    "Redox-Gleichungen für einfache Redox-Vorgänge mit Hilfe der Tabelle der Standardpotentiale formulieren und diskutieren"
+   ]
+  },
+  {
+   "key": "t53",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "d) Anwendungen mit Alltagsbezug",
+   "title": "Organische Chemie",
+   "sort_order": 23,
+   "subtasks": [
+    "Vielfalt der Kohlenstoffverbindungen erklären (Konstitutionsisomerie)"
+   ]
+  },
+  {
+   "key": "t54",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "d) Anwendungen mit Alltagsbezug",
+   "title": "Funktionelle Gruppen",
+   "sort_order": 24,
+   "subtasks": [
+    "Funktionelle Gruppen folgender Stoffklassen angeben: Alkene, Alkine, Alkohole, Aldehyde, Ketone, Carbonsäuren, Ester, Amine, Aminosäuren"
+   ]
+  },
+  {
+   "key": "t55",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "d) Anwendungen mit Alltagsbezug",
+   "title": "IUPAC-Nomenklatur",
+   "sort_order": 25,
+   "subtasks": [
+    "Einfachen Molekülen von Kohlenwasserstoffen, Alkoholen, Aldehyden, Ketonen, Carbonsäuren und deren Estern den IUPAC-Namen zuordnen"
+   ]
+  },
+  {
+   "key": "t56",
+   "subject": "su3",
+   "phase": "ph1",
+   "category": "d) Anwendungen mit Alltagsbezug",
+   "title": "Organische Reaktionen: Addition, Substitution, Kondensation",
+   "sort_order": 26,
+   "subtasks": [
+    "Addition (an Alkene, Alkine und Polymerisation), Substitution (an Alkanen) und Kondensation (Veresterung) an Beispielen beschreiben, ohne Reaktionsmechanismen"
+   ]
+  },
+  {
+   "key": "t57",
+   "subject": "su4",
+   "phase": "ph1",
+   "category": "TF1 Schweiz",
+   "title": "TF1 Schweiz: Bundesstaat — Entstehung und Weiterentwicklung",
+   "sort_order": 1,
+   "subtasks": [
+    "Überblick über die Entstehung des Schweizerischen Bundesstaates zwischen 1798 und 1848",
+    "Auseinandersetzungen um die Ausgestaltung des demokratischen Systems in der zweiten Hälfte des 19. Jahrhunderts kennen"
+   ]
+  },
+  {
+   "key": "t58",
+   "subject": "su4",
+   "phase": "ph1",
+   "category": "TF1 Schweiz",
+   "title": "TF1 Schweiz: Zeit der Weltkriege",
+   "sort_order": 2,
+   "subtasks": [
+    "Politische, wirtschaftliche und gesellschaftliche Herausforderungen kennen, vor denen die Schweiz durch die internationale Entwicklung in der ersten Hälfte des 20. Jh. stand"
+   ]
+  },
+  {
+   "key": "t59",
+   "subject": "su4",
+   "phase": "ph1",
+   "category": "TF1 Schweiz",
+   "title": "TF1 Schweiz: Nachkriegszeit",
+   "sort_order": 3,
+   "subtasks": [
+    "Politische, wirtschaftliche und gesellschaftliche Entwicklung der Schweiz in der Zeit nach 1945 verstehen"
+   ]
+  },
+  {
+   "key": "t60",
+   "subject": "su4",
+   "phase": "ph1",
+   "category": "TF1 Schweiz",
+   "title": "TF1 Schweiz: Demokratie",
+   "sort_order": 4,
+   "subtasks": [
+    "Aufbau und Funktionieren der heutigen schweizerischen Demokratie verstehen und besondere Merkmale beschreiben"
+   ]
+  },
+  {
+   "key": "t61",
+   "subject": "su4",
+   "phase": "ph1",
+   "category": "TF2 Welt",
+   "title": "TF2 Welt: Grundideen des 19. Jahrhunderts",
+   "sort_order": 5,
+   "subtasks": [
+    "Wichtigste politische und wirtschaftliche Grundideen unterscheiden und einordnen: Imperialismus, Liberalismus, Nationalismus, Sozialismus"
+   ]
+  },
+  {
+   "key": "t62",
+   "subject": "su4",
+   "phase": "ph1",
+   "category": "TF2 Welt",
+   "title": "TF2 Welt: Erster Weltkrieg",
+   "sort_order": 6,
+   "subtasks": [
+    "Beschreiben, wie es zum Ersten Weltkrieg kam, Überblick über dessen Verlauf"
+   ]
+  },
+  {
+   "key": "t63",
+   "subject": "su4",
+   "phase": "ph1",
+   "category": "TF2 Welt",
+   "title": "TF2 Welt: Nachkriegsordnung 1919/1920",
+   "sort_order": 7,
+   "subtasks": [
+    "Bedeutung der Pariser Vorortverträge für die weitere europäische Geschichte kennen"
+   ]
+  },
+  {
+   "key": "t64",
+   "subject": "su4",
+   "phase": "ph1",
+   "category": "TF2 Welt",
+   "title": "TF2 Welt: Totalitäre Diktaturen",
+   "sort_order": 8,
+   "subtasks": [
+    "Entstehung und wesentliche Merkmale kennen: italienischer Faschismus, Nationalsozialismus, Stalinismus"
+   ]
+  },
+  {
+   "key": "t65",
+   "subject": "su4",
+   "phase": "ph1",
+   "category": "TF2 Welt",
+   "title": "TF2 Welt: Weltwirtschaftskrise",
+   "sort_order": 9,
+   "subtasks": [
+    "Ursachen der Weltwirtschaftskrise von 1929 und Folgen in Europa und den USA kennen"
+   ]
+  },
+  {
+   "key": "t66",
+   "subject": "su4",
+   "phase": "ph1",
+   "category": "TF2 Welt",
+   "title": "TF2 Welt: Zweiter Weltkrieg",
+   "sort_order": 10,
+   "subtasks": [
+    "Erklären, wie es zum Zweiten Weltkrieg kam, Überblick über dessen Verlauf",
+    "Beschlüsse der Siegermächte zur Nachkriegsordnung bis 1950 kennen"
+   ]
+  },
+  {
+   "key": "t67",
+   "subject": "su4",
+   "phase": "ph1",
+   "category": "TF2 Welt",
+   "title": "TF2 Welt: Kalter Krieg",
+   "sort_order": 11,
+   "subtasks": [
+    "Überblick über Entstehung und Verlauf des Kalten Krieges zwischen 1945 und 1991",
+    "Hintergründe der Konferenz von Bandung kennen, wichtigste Auswirkungen erläutern (Blockfreien-Bewegung, Entkolonialisierung)",
+    "Veränderung der weltpolitischen Situation mit Ende des Kalten Krieges kennen"
+   ]
+  },
+  {
+   "key": "t68",
+   "subject": "su4",
+   "phase": "ph1",
+   "category": "TF2 Welt",
+   "title": "TF2 Welt: Europäische Integration",
+   "sort_order": 12,
+   "subtasks": [
+    "Einzelne Schritte der europäischen Integration nach 1945 kennen",
+    "Institution EU kennen, aktuelle zentrale Herausforderungen kennen"
+   ]
+  },
+  {
+   "key": "t69",
+   "subject": "su4",
+   "phase": "ph1",
+   "category": "TF2 Welt",
+   "title": "TF2 Welt: Supranationale Organisationen",
+   "sort_order": 13,
+   "subtasks": [
+    "UNO und NATO und ihre aktuelle Bedeutung kennen"
+   ]
+  },
+  {
+   "key": "t70",
+   "subject": "su4",
+   "phase": "ph1",
+   "category": "TF2 Welt",
+   "title": "TF2 Welt: China seit 1949",
+   "sort_order": 14,
+   "subtasks": [
+    "Politische und wirtschaftliche Entwicklung Chinas seit der Machtergreifung der Kommunisten kennen"
+   ]
+  },
+  {
+   "key": "t71",
+   "subject": "su4",
+   "phase": "ph1",
+   "category": "TF2 Welt",
+   "title": "TF2 Welt: Naher Osten",
+   "sort_order": 15,
+   "subtasks": [
+    "Gründe, die zum israelisch-arabischen Konflikt geführt haben, verstehen",
+    "Wichtigste Stationen der Auseinandersetzung kennen, Konflikt in grösseren Zusammenhang einordnen"
+   ]
+  },
+  {
+   "key": "t72",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "a) Zellbiologie und Genetik",
+   "title": "Moleküle des Lebendigen",
+   "sort_order": 1,
+   "subtasks": [
+    "Bau der Kohlenhydrate, Lipide, Proteine und Nukleinsäuren und ihre Rolle als Betriebs-, Bau- und Reservestoffe und Informationsträger erkennen",
+    "Funktionsweise und Bedeutung der Enzyme erklären"
+   ]
+  },
+  {
+   "key": "t73",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "a) Zellbiologie und Genetik",
+   "title": "Die Zelle (Struktur und Ultrastruktur pflanzlicher und tierischer Zellen)",
+   "sort_order": 2,
+   "subtasks": [
+    "Zellbestandteile im licht- und elektronenmikroskopischen Bild erkennen und ihre Aufgaben nennen"
+   ]
+  },
+  {
+   "key": "t74",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "a) Zellbiologie und Genetik",
+   "title": "Zellstoffwechsel: Energiestoffwechsel",
+   "sort_order": 3,
+   "subtasks": [
+    "Bruttogleichungen und Bedeutung von Photosynthese und Zellatmung angeben"
+   ]
+  },
+  {
+   "key": "t75",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "a) Zellbiologie und Genetik",
+   "title": "Zellstoffwechsel: Passiver und aktiver Transport",
+   "sort_order": 4,
+   "subtasks": [
+    "Diffusion, Osmose und aktiven Transport erklären und deren Bedeutung für den Zellstoffwechsel klarstellen"
+   ]
+  },
+  {
+   "key": "t76",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "a) Zellbiologie und Genetik",
+   "title": "Zellteilungen: Mitose",
+   "sort_order": 5,
+   "subtasks": [
+    "Phasen der Teilung und Verlauf des Zellzyklus beschreiben"
+   ]
+  },
+  {
+   "key": "t77",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "a) Zellbiologie und Genetik",
+   "title": "Zellteilungen: Meiose",
+   "sort_order": 6,
+   "subtasks": [
+    "Ablauf der Teilungen beschreiben und Bedeutung des Vorgangs für die sexuelle Fortpflanzung erklären",
+    "Veränderungen der Chromosomenanzahl im Karyogramm erkennen"
+   ]
+  },
+  {
+   "key": "t78",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "a) Zellbiologie und Genetik",
+   "title": "Klassische Genetik (Monohybride/dihybride Erbgänge, geschlechtsgekoppelte Vererbung)",
+   "sort_order": 7,
+   "subtasks": [
+    "Mendelsche Gesetze zur Lösung genetischer Probleme anwenden (Kopplung und Crossing-over nicht verlangt)"
+   ]
+  },
+  {
+   "key": "t79",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "a) Zellbiologie und Genetik",
+   "title": "Molekulargenetik: Nukleinsäuren",
+   "sort_order": 8,
+   "subtasks": [
+    "Struktur beschreiben und Bausteine der DNA nennen (chemische Formeln nicht verlangt)",
+    "Replikation erklären"
+   ]
+  },
+  {
+   "key": "t80",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "a) Zellbiologie und Genetik",
+   "title": "Molekulargenetik: Proteinsynthese",
+   "sort_order": 9,
+   "subtasks": [
+    "Proteinsynthese beschreiben: Transkription und Translation, genetischer Code"
+   ]
+  },
+  {
+   "key": "t81",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "b) Humanbiologie",
+   "title": "Verdauungs-, Atmungs- und Blutkreislaufsystem",
+   "sort_order": 10,
+   "subtasks": [
+    "Anatomie dieser Systeme beschreiben",
+    "Grundprinzipien ihrer Physiologie beschreiben"
+   ]
+  },
+  {
+   "key": "t82",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "b) Humanbiologie",
+   "title": "Nervensystem: Neuron, Synapse",
+   "sort_order": 11,
+   "subtasks": [
+    "Bau und Funktionsprinzip beschreiben (Ionenverschiebungen bei Erregungsleitung nicht verlangt)"
+   ]
+  },
+  {
+   "key": "t83",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "b) Humanbiologie",
+   "title": "Nervensystem: Reflexe",
+   "sort_order": 12,
+   "subtasks": [
+    "Reflexbogen erklären"
+   ]
+  },
+  {
+   "key": "t84",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "b) Humanbiologie",
+   "title": "Nervensystem: Vegetatives Nervensystem",
+   "sort_order": 13,
+   "subtasks": [
+    "Anatomie und Funktionsprinzip beschreiben"
+   ]
+  },
+  {
+   "key": "t85",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "b) Humanbiologie",
+   "title": "Sinnesorgane",
+   "sort_order": 14,
+   "subtasks": [
+    "Bau und Funktionsweise des Auges beschreiben"
+   ]
+  },
+  {
+   "key": "t86",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "c) Umwelt und Evolution",
+   "title": "Der Begriff Ökosystem (Biotop, Biozönose)",
+   "sort_order": 15,
+   "subtasks": [
+    "Biotische und abiotische Faktoren beschreiben",
+    "Beziehungen zwischen den Faktoren und der Artenzusammensetzung klarstellen"
+   ]
+  },
+  {
+   "key": "t87",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "c) Umwelt und Evolution",
+   "title": "Kreislauf des Kohlenstoffs",
+   "sort_order": 16,
+   "subtasks": [
+    "Kreislauf beschreiben",
+    "Einfluss des Menschen auf den Kreislauf erörtern"
+   ]
+  },
+  {
+   "key": "t88",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "c) Umwelt und Evolution",
+   "title": "Evolution: Hauptschritte der Entwicklung der Lebewesen",
+   "sort_order": 17,
+   "subtasks": [
+    "Wichtige Schritte zeitlich einordnen: Erscheinen von Leben, erste Eukaryoten, erste Vielzeller; Schritte vom Wasser aufs Land"
+   ]
+  },
+  {
+   "key": "t89",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "c) Umwelt und Evolution",
+   "title": "Evolutionstheorien",
+   "sort_order": 18,
+   "subtasks": [
+    "Theorien von Darwin und Lamarck darlegen"
+   ]
+  },
+  {
+   "key": "t90",
+   "subject": "su5",
+   "phase": "ph1",
+   "category": "c) Umwelt und Evolution",
+   "title": "Humanevolution",
+   "sort_order": 19,
+   "subtasks": [
+    "Evolution des Menschen beschreiben"
+   ]
+  },
+  {
+   "key": "t91",
+   "subject": "su6",
+   "phase": "ph1",
+   "category": "Modul 1",
+   "title": "Modul 1 – Allgemeine Geologie",
+   "sort_order": 1,
+   "subtasks": [
+    "Geologische Ereignisse in die geologische Zeittafel einordnen",
+    "Aufbau der Erde, Grundlagen der Plattentektonik kennen, Auswirkungen der Plattenverschiebungen auf Vulkanismus und Erdbeben kennen",
+    "Kenntnisse der Oberflächenformen der Erde und exogene Prozesse auf Beurteilung von Naturgefahren anwenden",
+    "Leitgesteine kennen, einer Gesteinsgruppe zuordnen, gesteinsbildende Prozesse (Kreislauf der Gesteine) verstehen"
+   ]
+  },
+  {
+   "key": "t92",
+   "subject": "su6",
+   "phase": "ph1",
+   "category": "Modul 1",
+   "title": "Modul 1 – Geologie der Schweiz",
+   "sort_order": 2,
+   "subtasks": [
+    "Tektonische Gliederung der Schweiz kennen (Alpen: Zentralmassive/Deckenbau; Jura: tektonische Gliederung/Oberflächenformen; Mittelland: Tertiär/Quartär)",
+    "Einfache geologische und tektonische Profile interpretieren"
+   ]
+  },
+  {
+   "key": "t93",
+   "subject": "su6",
+   "phase": "ph1",
+   "category": "Modul 1",
+   "title": "Modul 1 – Grundlagen der Klimatologie",
+   "sort_order": 3,
+   "subtasks": [
+    "Grundkenntnisse in Meteorologie und Klimatologie, einfache Wetterkarten interpretieren",
+    "Klimadiagramme interpretieren und einer Klimazone zuordnen",
+    "Klimaschwankungen und Klimawandel auseinanderhalten"
+   ]
+  },
+  {
+   "key": "t94",
+   "subject": "su6",
+   "phase": "ph1",
+   "category": "Modul 2",
+   "title": "Modul 2 – Wirtschaftsgeographie",
+   "sort_order": 4,
+   "subtasks": [
+    "Wirtschaftssektoren kennen, entsprechende Modelle skizzieren und interpretieren",
+    "Grundkenntnisse im Bereich Landwirtschaft und Energie mit Schwerpunkt Schweiz",
+    "Begriff \"Nachhaltigkeit\" verstehen, beurteilen wann Massnahmen der Wirtschaft als nachhaltig einzustufen sind"
+   ]
+  },
+  {
+   "key": "t95",
+   "subject": "su6",
+   "phase": "ph1",
+   "category": "Modul 2",
+   "title": "Modul 2 – Verkehr und Raum",
+   "sort_order": 5,
+   "subtasks": [
+    "Aufgaben von Richt- und Zonenplänen kennen (nach Raumplanungsgesetz), Beispiele interpretieren",
+    "Grundlagen der Verkehrspolitik der Schweiz kennen"
+   ]
+  },
+  {
+   "key": "t96",
+   "subject": "su6",
+   "phase": "ph1",
+   "category": "Modul 2",
+   "title": "Modul 2 – Entwicklungsfragen",
+   "sort_order": 6,
+   "subtasks": [
+    "Einblicke in Problematik der Globalisierung und ihre Auswirkungen auf Entwicklung und Umwelt"
+   ]
+  },
+  {
+   "key": "t97",
+   "subject": "su6",
+   "phase": "ph1",
+   "category": "Modul 2",
+   "title": "Modul 2 – Demographie",
+   "sort_order": 7,
+   "subtasks": [
+    "Grundkenntnisse der Demographie",
+    "Statistische Angaben zur Bevölkerung auf Grundlage der demographischen Theorie beurteilen"
+   ]
+  },
+  {
+   "key": "t98",
+   "subject": "su6",
+   "phase": "ph1",
+   "category": "Modul 2",
+   "title": "Modul 2 – Stadtgeographie",
+   "sort_order": 8,
+   "subtasks": [
+    "Stadtbegriff kennen, anhand Karten und Luftbildern typische Stadtmodelle ableiten",
+    "Veränderungsprozesse kennen, denen Städte in den letzten Jahrzehnten unterlagen"
+   ]
+  },
+  {
+   "key": "t99",
+   "subject": "su6",
+   "phase": "ph1",
+   "category": "Modul 3",
+   "title": "Modul 3 – Regionalgeographie China",
+   "sort_order": 9,
+   "subtasks": [
+    "Geographische Grundkenntnisse Chinas: Topografische Übersicht, naturgeografische Grundlagen, Bevölkerung, wirtschaftliche Schwerpunktregionen und Randgebiete, Industrialisierung",
+    "Karten, Grafiken und Statistiken zu Bevölkerung, Wirtschaft und Umwelt interpretieren",
+    "Bedeutung Chinas im regionalen und globalen Umfeld kennen"
+   ]
+  },
+  {
+   "key": "t100",
+   "subject": "su7",
+   "phase": "ph1",
+   "category": null,
+   "title": "„Im Meer waren wir nie\" (Meral Kureyshi)",
+   "sort_order": 1,
+   "subtasks": [
+    "Text und seine Grundzüge erfassen (Inhalt, Aufbau, wichtigste Themen und Motive), Wesentliches herausarbeiten",
+    "Text beschreiben: Wortschatz und Grammatik, formale Eigenheiten, wichtige rhetorische Figuren, Wirkung auf die Leserschaft deuten",
+    "Erzählperspektive und Erzählsituation bestimmen",
+    "Literarischen, künstlerischen und historischen Kontext kennen"
+   ]
+  },
+  {
+   "key": "t101",
+   "subject": "su7",
+   "phase": "ph1",
+   "category": null,
+   "title": "„Lichtspiel\" (Daniel Kehlmann)",
+   "sort_order": 2,
+   "subtasks": [
+    "Text und seine Grundzüge erfassen (Inhalt, Aufbau, wichtigste Themen und Motive), Wesentliches herausarbeiten",
+    "Text beschreiben: Wortschatz und Grammatik, formale Eigenheiten, wichtige rhetorische Figuren, Wirkung auf die Leserschaft deuten",
+    "Erzählperspektive und Erzählsituation bestimmen",
+    "Literarischen, künstlerischen und historischen Kontext kennen"
+   ]
+  },
+  {
+   "key": "t102",
+   "subject": "su7",
+   "phase": "ph1",
+   "category": null,
+   "title": "„Draussen vor der Tür\" (Wolfgang Borchert)",
+   "sort_order": 3,
+   "subtasks": [
+    "Text und seine Grundzüge erfassen (Inhalt, Aufbau, wichtigste Themen und Motive), Wesentliches herausarbeiten",
+    "Text beschreiben: Wortschatz und Grammatik, formale Eigenheiten, wichtige rhetorische Figuren, Wirkung auf die Leserschaft deuten",
+    "Erzählperspektive/Erzählsituation bestimmen (Hörspiel/Drama)",
+    "Historischen Kontext kennen (Nachkriegszeit)"
+   ]
+  },
+  {
+   "key": "t103",
+   "subject": "su7",
+   "phase": "ph1",
+   "category": null,
+   "title": "Heine-Gedichte (10, Auswahl)",
+   "sort_order": 4,
+   "subtasks": [
+    "Texte und ihre Grundzüge erfassen, Wesentliches herausarbeiten",
+    "Formale Eigenheiten, rhetorische Figuren und metrische Regeln je Gedicht bestimmen, Wirkung auf die Leserschaft deuten",
+    "Literarischen und historischen Kontext (Heine, Epoche) kennen"
+   ]
+  },
+  {
+   "key": "t104",
+   "subject": "su7",
+   "phase": "ph1",
+   "category": null,
+   "title": "Übungsaufsätze (schriftliche Prüfung: Reflexion)",
+   "sort_order": 5,
+   "subtasks": [
+    "Sachgerechte, differenzierte, strukturierte Auseinandersetzung mit einer Thematik ausgehend von einem Zitat/Aphorismus verfassen",
+    "Textsorten üben: Erörterung, Essay, Rede, Kommentar, Brief",
+    "Textvorgaben innerhalb von max. 20 Minuten erfassen (Lektüre & Aufgabenstellung)",
+    "Realitätsnahen Kontext (Senderrolle, Adressaten, Kommunikationssituation) herausarbeiten"
+   ]
+  },
+  {
+   "key": "t105",
+   "subject": "su8",
+   "phase": "ph1",
+   "category": null,
+   "title": "Werk 1 (SMK-Liste)",
+   "sort_order": 1,
+   "subtasks": [
+    "Werk auswählen (Autor, Titel, Datum des erstmaligen Erscheinens, benutzte Ausgabe für Anmeldung notieren)",
+    "Werk in Beziehung zum Autor und zu seiner Zeit betrachten",
+    "Handlung, differenzierte Charakterisierung der Hauptfiguren erarbeiten",
+    "Themen und Stilmittel nennen und analysieren"
+   ]
+  },
+  {
+   "key": "t106",
+   "subject": "su8",
+   "phase": "ph1",
+   "category": null,
+   "title": "Werk 2 (SMK-Liste, anderer Autor)",
+   "sort_order": 2,
+   "subtasks": [
+    "Werk auswählen",
+    "Werk in Beziehung zum Autor und zu seiner Zeit betrachten",
+    "Handlung, differenzierte Charakterisierung der Hauptfiguren erarbeiten",
+    "Themen und Stilmittel nennen und analysieren"
+   ]
+  },
+  {
+   "key": "t107",
+   "subject": "su8",
+   "phase": "ph1",
+   "category": null,
+   "title": "Werk 3 (SMK-Liste, anderer Autor)",
+   "sort_order": 3,
+   "subtasks": [
+    "Werk auswählen",
+    "Werk in Beziehung zum Autor und zu seiner Zeit betrachten",
+    "Handlung, differenzierte Charakterisierung der Hauptfiguren erarbeiten",
+    "Themen und Stilmittel nennen und analysieren"
+   ]
+  },
+  {
+   "key": "t108",
+   "subject": "su8",
+   "phase": "ph1",
+   "category": null,
+   "title": "Grammatik",
+   "sort_order": 3,
+   "subtasks": []
+  },
+  {
+   "key": "t109",
+   "subject": "su8",
+   "phase": "ph1",
+   "category": null,
+   "title": "Vorbereitung auf die Textanalyse",
+   "sort_order": 4,
+   "subtasks": [
+    "Text von ca. 600–800 Wörtern: morphosyntaktische und lexikalische Kenntnisse sowie Textverständnis üben",
+    "Fähigkeit zur Textinterpretation üben",
+    "Freien Ausdruck im Zusammenhang mit der Thematik üben (200–300 Wörter)"
+   ]
+  },
+  {
+   "key": "t110",
+   "subject": "su8",
+   "phase": "ph1",
+   "category": null,
+   "title": "Basiswortschatz (3000–4000 Wörter) und Grammatik",
+   "sort_order": 5,
+   "subtasks": [
+    "Basiswortschatz aufbauen und beherrschen",
+    "Grammatik (Morphosyntax) beherrschen"
+   ]
+  }
+ ],
+ "weeks": [
+  {
+   "start_date": "2026-08-24",
+   "end_date": "2026-08-30",
+   "phase": "ph1",
+   "primary_subject": "su5",
+   "primary_focus": "Biologie: Zellbiologie & Genetik I",
+   "primary_topics": [
+    "t72",
+    "t73",
+    "t74",
+    "t75"
+   ],
+   "secondary_subject": "su7",
+   "secondary_focus": "Deutsch: „Im Meer waren wir nie\" (Start)",
+   "secondary_topics": [
+    "t100"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2026-08-31",
+   "end_date": "2026-09-06",
+   "phase": "ph1",
+   "primary_subject": "su5",
+   "primary_focus": "Biologie: Zellbiologie & Genetik II",
+   "primary_topics": [
+    "t76",
+    "t77",
+    "t78",
+    "t79",
+    "t80"
+   ],
+   "secondary_subject": "su6",
+   "secondary_focus": "Geografie: Allgemeine Geologie",
+   "secondary_topics": [
+    "t91"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2026-09-07",
+   "end_date": "2026-09-13",
+   "phase": "ph1",
+   "primary_subject": "su3",
+   "primary_focus": "Chemie: Stoffe",
+   "primary_topics": [
+    "t31",
+    "t32",
+    "t33",
+    "t34"
+   ],
+   "secondary_subject": "su7",
+   "secondary_focus": "Deutsch: „Im Meer waren wir nie\" (fertig)",
+   "secondary_topics": [
+    "t100"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2026-09-14",
+   "end_date": "2026-09-20",
+   "phase": "ph1",
+   "primary_subject": "su5",
+   "primary_focus": "Biologie: Humanbiologie",
+   "primary_topics": [
+    "t81",
+    "t82",
+    "t83",
+    "t84",
+    "t85"
+   ],
+   "secondary_subject": "su6",
+   "secondary_focus": "Geografie: Geologie der Schweiz",
+   "secondary_topics": [
+    "t92"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2026-09-21",
+   "end_date": "2026-09-27",
+   "phase": "ph1",
+   "primary_subject": "su3",
+   "primary_focus": "Chemie: Atom- und Bindungslehre I",
+   "primary_topics": [
+    "t35",
+    "t36",
+    "t37",
+    "t38"
+   ],
+   "secondary_subject": "su8",
+   "secondary_focus": "Englisch: Werk 1 (Start)",
+   "secondary_topics": [
+    "t105"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2026-09-28",
+   "end_date": "2026-10-04",
+   "phase": "ph1",
+   "primary_subject": "su5",
+   "primary_focus": "Biologie: Umwelt & Evolution",
+   "primary_topics": [
+    "t86",
+    "t87",
+    "t88",
+    "t89",
+    "t90"
+   ],
+   "secondary_subject": "su6",
+   "secondary_focus": "Geografie: Grundlagen der Klimatologie",
+   "secondary_topics": [
+    "t93"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2026-10-05",
+   "end_date": "2026-10-11",
+   "phase": "ph1",
+   "primary_subject": "su3",
+   "primary_focus": "Chemie: Atom- und Bindungslehre II",
+   "primary_topics": [
+    "t39",
+    "t40",
+    "t41",
+    "t42",
+    "t43"
+   ],
+   "secondary_subject": "su7",
+   "secondary_focus": "Deutsch: „Lichtspiel\"",
+   "secondary_topics": [
+    "t101"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2026-10-12",
+   "end_date": "2026-10-18",
+   "phase": "ph1",
+   "primary_subject": "su3",
+   "primary_focus": "Chemie: Reaktionen I",
+   "primary_topics": [
+    "t44",
+    "t45",
+    "t46",
+    "t47"
+   ],
+   "secondary_subject": "su6",
+   "secondary_focus": "Geografie: Wirtschaftsgeografie",
+   "secondary_topics": [
+    "t94"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2026-10-19",
+   "end_date": "2026-10-25",
+   "phase": "ph1",
+   "primary_subject": "su4",
+   "primary_focus": "Geschichte: TF1 Schweiz I",
+   "primary_topics": [
+    "t57",
+    "t58"
+   ],
+   "secondary_subject": "su2",
+   "secondary_focus": "Mathematik: Vektorgeometrie 3D",
+   "secondary_topics": [
+    "t28"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2026-10-26",
+   "end_date": "2026-11-01",
+   "phase": "ph1",
+   "primary_subject": "su3",
+   "primary_focus": "Chemie: Reaktionen II",
+   "primary_topics": [
+    "t48",
+    "t49",
+    "t50",
+    "t51",
+    "t52"
+   ],
+   "secondary_subject": "su6",
+   "secondary_focus": "Geografie: Verkehr & Raum",
+   "secondary_topics": [
+    "t95"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2026-11-02",
+   "end_date": "2026-11-08",
+   "phase": "ph1",
+   "primary_subject": "su3",
+   "primary_focus": "Chemie: Anwendungen mit Alltagsbezug",
+   "primary_topics": [
+    "t53",
+    "t54",
+    "t55",
+    "t56"
+   ],
+   "secondary_subject": "su8",
+   "secondary_focus": "Englisch: Werk 2",
+   "secondary_topics": [
+    "t106"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2026-11-09",
+   "end_date": "2026-11-15",
+   "phase": "ph1",
+   "primary_subject": "su1",
+   "primary_focus": "Physik: Mechanik",
+   "primary_topics": [
+    "t1",
+    "t2",
+    "t3",
+    "t4",
+    "t5",
+    "t6",
+    "t7"
+   ],
+   "secondary_subject": "su6",
+   "secondary_focus": "Geografie: Entwicklungsfragen",
+   "secondary_topics": [
+    "t96"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2026-11-16",
+   "end_date": "2026-11-22",
+   "phase": "ph1",
+   "primary_subject": "su4",
+   "primary_focus": "Geschichte: TF1 Schweiz II",
+   "primary_topics": [
+    "t59",
+    "t60"
+   ],
+   "secondary_subject": "su2",
+   "secondary_focus": "Mathematik: Stochastik",
+   "secondary_topics": [
+    "t29"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2026-11-23",
+   "end_date": "2026-11-29",
+   "phase": "ph1",
+   "primary_subject": "su1",
+   "primary_focus": "Physik: Wärmelehre",
+   "primary_topics": [
+    "t8",
+    "t9",
+    "t10",
+    "t11",
+    "t12",
+    "t13",
+    "t14"
+   ],
+   "secondary_subject": "su6",
+   "secondary_focus": "Geografie: Demografie",
+   "secondary_topics": [
+    "t97"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2026-11-30",
+   "end_date": "2026-12-06",
+   "phase": "ph1",
+   "primary_subject": "su1",
+   "primary_focus": "Physik: Elektrizität",
+   "primary_topics": [
+    "t15",
+    "t16",
+    "t17",
+    "t18",
+    "t19"
+   ],
+   "secondary_subject": "su7",
+   "secondary_focus": "Deutsch: „Draussen vor der Tür\"",
+   "secondary_topics": [
+    "t102"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2026-12-07",
+   "end_date": "2026-12-13",
+   "phase": "ph1",
+   "primary_subject": "su1",
+   "primary_focus": "Physik: Optik",
+   "primary_topics": [
+    "t20",
+    "t21",
+    "t22"
+   ],
+   "secondary_subject": "su6",
+   "secondary_focus": "Geografie: Stadtgeografie",
+   "secondary_topics": [
+    "t98"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2026-12-14",
+   "end_date": "2026-12-20",
+   "phase": "ph1",
+   "primary_subject": "su2",
+   "primary_focus": "Mathematik: Analysis I",
+   "primary_topics": [
+    "t24"
+   ],
+   "secondary_subject": "su8",
+   "secondary_focus": "Englisch: Werk 3",
+   "secondary_topics": [
+    "t107"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2026-12-21",
+   "end_date": "2026-12-27",
+   "phase": "ph1",
+   "primary_subject": "su2",
+   "primary_focus": "Pufferwoche (Weihnachten) — Mathematik: Algebra",
+   "primary_topics": [
+    "t23"
+   ],
+   "secondary_subject": "su7",
+   "secondary_focus": "Deutsch: Heine-Gedichte (10)",
+   "secondary_topics": [
+    "t103"
+   ],
+   "note": null,
+   "is_buffer_week": true
+  },
+  {
+   "start_date": "2026-12-28",
+   "end_date": "2027-01-03",
+   "phase": "ph1",
+   "primary_subject": "su2",
+   "primary_focus": "Pufferwoche (Neujahr) — Mathematik: Trigonometrie",
+   "primary_topics": [
+    "t27"
+   ],
+   "secondary_subject": null,
+   "secondary_focus": "frei / leichte Repetition",
+   "secondary_topics": [],
+   "note": null,
+   "is_buffer_week": true
+  },
+  {
+   "start_date": "2027-01-04",
+   "end_date": "2027-01-10",
+   "phase": "ph1",
+   "primary_subject": "su4",
+   "primary_focus": "Geschichte: TF2 Welt I",
+   "primary_topics": [
+    "t61",
+    "t62",
+    "t63",
+    "t64"
+   ],
+   "secondary_subject": "su6",
+   "secondary_focus": "Geografie: Regionalgeografie China",
+   "secondary_topics": [
+    "t99"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2027-01-11",
+   "end_date": "2027-01-17",
+   "phase": "ph1",
+   "primary_subject": "su4",
+   "primary_focus": "Geschichte: TF2 Welt II",
+   "primary_topics": [
+    "t65",
+    "t66",
+    "t67"
+   ],
+   "secondary_subject": "su2",
+   "secondary_focus": "Mathematik: Analysis II",
+   "secondary_topics": [
+    "t25",
+    "t26"
+   ],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2027-01-18",
+   "end_date": "2027-01-24",
+   "phase": "ph1",
+   "primary_subject": "su4",
+   "primary_focus": "Geschichte: TF2 Welt III",
+   "primary_topics": [
+    "t68",
+    "t69",
+    "t70",
+    "t71"
+   ],
+   "secondary_subject": null,
+   "secondary_focus": "Repetition Naturwissenschaften (Bio/Chemie/Physik Schwachstellen)",
+   "secondary_topics": [],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2027-01-25",
+   "end_date": "2027-01-31",
+   "phase": "ph1",
+   "primary_subject": "su2",
+   "primary_focus": "Grosse Repetitionswoche — Mathematik: Alte Passerelle-Prüfungen rechnen",
+   "primary_topics": [
+    "t30"
+   ],
+   "secondary_subject": "su7",
+   "secondary_focus": "Deutsch: Übungsaufsätze",
+   "secondary_topics": [
+    "t104"
+   ],
+   "note": "+ Standortbestimmung/Diagnostik-Test über alle Fächer, Abschluss Fundament",
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2027-07-10",
+   "end_date": "2027-07-16",
+   "phase": "ph5",
+   "primary_subject": null,
+   "primary_focus": "Naturwissenschaften (Bio, Chemie, Physik) — Volltest + Fehleranalyse",
+   "primary_topics": [],
+   "secondary_subject": null,
+   "secondary_focus": null,
+   "secondary_topics": [],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2027-07-17",
+   "end_date": "2027-07-23",
+   "phase": "ph5",
+   "primary_subject": null,
+   "primary_focus": "Geistes-/Sozialwissenschaften (Geschichte, Geografie) — Volltest + Fehleranalyse",
+   "primary_topics": [],
+   "secondary_subject": null,
+   "secondary_focus": null,
+   "secondary_topics": [],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2027-07-24",
+   "end_date": "2027-07-30",
+   "phase": "ph5",
+   "primary_subject": null,
+   "primary_focus": "Mathematik/Deutsch — Volltest + Fehleranalyse",
+   "primary_topics": [],
+   "secondary_subject": null,
+   "secondary_focus": null,
+   "secondary_topics": [],
+   "note": null,
+   "is_buffer_week": false
+  },
+  {
+   "start_date": "2027-07-31",
+   "end_date": "2027-08-08",
+   "phase": "ph5",
+   "primary_subject": null,
+   "primary_focus": "Vollsimulation aller Fächer unter Prüfungsbedingungen",
+   "primary_topics": [],
+   "secondary_subject": null,
+   "secondary_focus": null,
+   "secondary_topics": [],
+   "note": null,
+   "is_buffer_week": false
+  }
+ ],
+ "deadlines": [
+  {
+   "title": "Voranmeldung EMS bei swissuniversities",
+   "date": "2027-02-15",
+   "end_date": null,
+   "description": null,
+   "critical": true
+  },
+  {
+   "title": "Anmeldefenster Passerelle Sommersession",
+   "date": "2027-04-20",
+   "end_date": "2027-06-01",
+   "description": "Fällt in die RS!",
+   "critical": true
+  },
+  {
+   "title": "EMS-Anmeldung + CHF 300 via MEDON",
+   "date": "2027-05-25",
+   "end_date": null,
+   "description": null,
+   "critical": true
+  },
+  {
+   "title": "EMS-Testtag",
+   "date": "2027-07-09",
+   "end_date": null,
+   "description": null,
+   "critical": true
+  },
+  {
+   "title": "Passerelle schriftlich",
+   "date": "2027-08-09",
+   "end_date": "2027-08-13",
+   "description": null,
+   "critical": true
+  },
+  {
+   "title": "Passerelle mündlich",
+   "date": "2027-08-28",
+   "end_date": "2027-09-04",
+   "description": null,
+   "critical": true
+  }
+ ],
+ "links": [
+  {
+   "category": "Lernressourcen",
+   "title": "NCWiki",
+   "url": "https://www.nc-wiki.ch/",
+   "description": "Wiki-Sammlung rund um Numerus-Clausus-Prüfungen (EMS, Passerelle) in der Schweiz.",
+   "sort_order": 0
+  },
+  {
+   "category": "Lernressourcen",
+   "title": "EMS 2026 – Medgurus",
+   "url": "https://medgurus.de/ems/",
+   "description": "Vorbereitungskurs/Infos zum EMS (Eignungstest Medizinstudium Schweiz).",
+   "sort_order": 1
+  },
+  {
+   "category": "Lernressourcen",
+   "title": "EMS Gesamtpaket 2027 – EMS Coaches",
+   "url": "https://emscoaches.ch/produkt/gesamtpaket-ems-2027/",
+   "description": "Buch + digitales Lernmaterial für die EMS-Vorbereitung 2027.",
+   "sort_order": 2
+  },
+  {
+   "category": "Lernressourcen",
+   "title": "TMS Hero",
+   "url": "https://www.tmshero.de/",
+   "description": "Vorbereitungsplattform für den TMS (Test für Medizinische Studiengänge, DE).",
+   "sort_order": 3
+  },
+  {
+   "category": "Lernressourcen",
+   "title": "Feynman-Methode – Guide",
+   "url": "https://blog.educate-ai.com/de/feynman-methode-ultimativer-guide-2025",
+   "description": "4-Schritte-Anleitung zur Feynman-Lernmethode für tieferes Verständnis komplexer Themen.",
+   "sort_order": 4
+  },
+  {
+   "category": "Lernressourcen",
+   "title": "SBFI – Ergänzungsprüfung Passerelle",
+   "url": "https://www.sbfi.admin.ch/de/ergaenzungspruefung-passerelle",
+   "description": "Offizielle Seite des SBFI mit Richtlinien, Anmeldefristen und Prüfungsterminen.",
+   "sort_order": 5
+  }
+ ]
+}
