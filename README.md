@@ -19,7 +19,7 @@ Live: **https://lumo.berendak.ch**
 | **Übersicht** | Status aller Ziele, nächste Themen nach Priorität, nächste Frist, empfohlenes Lerntempo, Wochenrückblick. |
 | **Organisation** | Aufgaben, Termine und ein Zeitstrahl mit Phasen, Fristen und Terminen. |
 | **Vorlagen** | Startklare Lernpläne beim Onboarding oder später dazuladen. Alle Daten werden auf ein frei wählbares Startdatum verschoben. Mitgeliefert: *Passerelle + EMS (Schweiz)* mit 110 Themen nach den SBFI-Richtlinien 2023, und ein kleiner Beispielplan. |
-| **KI-Quiz** | Zu jedem Thema oder ganzen Fach erzeugt eine KI Multiple-Choice-Fragen mit Erklärungen. Das letzte Ergebnis steht am Thema, schwache Themen schlägt die Übersicht zum Wiederholen vor. |
+| **Abfragen (KI)** | Eigener Bereich zum Ausfragen: Thema oder ganzes Fach wählen, die KI erstellt Multiple-Choice-Fragen. Frage für Frage mit sofortigem Feedback und Erklärung, danach Auswertung. Vorschläge (schwache, erledigte aber nie abgefragte, lange nicht geübte Themen), Stand pro Fach, Verlauf und ein Fehlerheft, dessen Fragen sich ohne KI erneut üben lassen. |
 | **Datenschutz** | Jede Person sieht nur ihre eigenen Daten. Export aller Daten als JSON, Plan zurücksetzen, Konto inkl. aller Daten löschen. |
 
 ## Technik
@@ -146,7 +146,7 @@ npm run dev               # http://localhost:5173
 │       ├── StudyPlanTopics.jsx  Themen-Checkliste
 │       ├── StudyBurndown.jsx    Soll/Ist pro Phase
 │       ├── Progress.jsx         Fortschritt + Verlauf pro Ziel
-│       ├── QuizDialog.jsx       KI-Quiz: Fragen, Auswertung, Erklärungen
+│       ├── quiz/                Abfragen-Bereich: Start, Statistik, Fehlerheft, laufende Abfrage
 │       ├── planner/             Editoren: Ziele, Fächer & Themen, Phasen, Wochen, Fristen
 │       ├── Settings.jsx         Profil, Vorlagen, Export, Reset, Konto löschen
 │       └── …                    Aufgaben, Kalender, Zeitstrahl, Links, Übersicht

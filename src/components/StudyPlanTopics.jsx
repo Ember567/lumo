@@ -4,7 +4,6 @@ import { onPlanChanged, onScrollToTopics, recordProgress } from '../lib/progress
 import { priorityClass, sortSubjects } from '../lib/plan.js'
 import { Sparkles } from 'lucide-react'
 import { lastScoresByTopic, scoreClass } from '../lib/quiz.js'
-import QuizDialog from './QuizDialog.jsx'
 
 // Gruppiert Themen (bereits nach sort_order sortiert) nach category, ohne
 // die Reihenfolge zu verändern. Themen ohne category (Deutsch/Englisch)
@@ -33,7 +32,7 @@ function topicUnits(topic, subtasks) {
   return { total: 1, done: topic.done ? 1 : 0 }
 }
 
-export default function StudyPlanTopics({ userId, onNavigate }) {
+export default function StudyPlanTopics({ userId, onNavigate, onStartQuiz }) {
   const [subjects, setSubjects] = useState([])
   const [topics, setTopics] = useState([])
   const [subtasksByTopic, setSubtasksByTopic] = useState({})
@@ -41,7 +40,6 @@ export default function StudyPlanTopics({ userId, onNavigate }) {
   const [expandedTopicId, setExpandedTopicId] = useState(null)
   const [highlightTopicIds, setHighlightTopicIds] = useState([])
   const [scores, setScores] = useState({})
-  const [quizTarget, setQuizTarget] = useState(null) // { topicId | subjectId, label }
   const topicRefs = useRef({})
 
   // Eigene Änderungen werden optimistisch gesetzt; neu geladen wird nur,
@@ -208,9 +206,9 @@ export default function StudyPlanTopics({ userId, onNavigate }) {
                   {list.length > 0 && (
                     <button
                       type="button" className="quiz-subject-btn"
-                      onClick={() => setQuizTarget({ subjectId: s.id, label: s.name })}
+                      onClick={() => onStartQuiz({ subjectId: s.id, label: s.name, count: 8 })}
                     >
-                      <Sparkles size={14} strokeWidth={2} /> Fach-Quiz: gemischte Fragen aus {s.name}
+                      <Sparkles size={14} strokeWidth={2} /> Ganzes Fach abfragen: {s.name}
                     </button>
                   )}
                   {groupByCategory(list).map((group, gi) => (
@@ -248,9 +246,9 @@ export default function StudyPlanTopics({ userId, onNavigate }) {
                           <button
                             type="button"
                             className={`quiz-topic-btn ${scores[t.id] ? scoreClass(scores[t.id].pct) : ''}`}
-                            onClick={() => setQuizTarget({ topicId: t.id, label: t.title })}
-                            title={scores[t.id] ? `Letztes Quiz: ${scores[t.id].correct}/${scores[t.id].total} richtig — neues Quiz starten` : 'Quiz zu diesem Thema starten'}
-                            aria-label={`Quiz zu ${t.title}`}
+                            onClick={() => onStartQuiz({ topicId: t.id, label: t.title, subjectName: s.name })}
+                            title={scores[t.id] ? `Letzte Abfrage: ${scores[t.id].correct}/${scores[t.id].total} richtig. Nochmal abfragen` : 'Dieses Thema abfragen'}
+                            aria-label={`${t.title} abfragen`}
                           >
                             <Sparkles size={13} strokeWidth={2} />
                             {scores[t.id] && <span>{scores[t.id].correct}/{scores[t.id].total}</span>}
@@ -293,7 +291,6 @@ export default function StudyPlanTopics({ userId, onNavigate }) {
         )}
       </div>
 
-      {quizTarget && <QuizDialog userId={userId} target={quizTarget} onClose={() => setQuizTarget(null)} />}
     </section>
   )
 }

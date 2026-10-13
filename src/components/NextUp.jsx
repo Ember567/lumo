@@ -3,11 +3,9 @@ import { supabase } from '../supabaseClient.js'
 import { onPlanChanged } from '../lib/progress.js'
 import { PRIORITY_ORDER } from '../lib/plan.js'
 import { currentPhaseOf, daysUntil, fmtDate, parseDate, today } from '../lib/dates.js'
-import { lastScoresByTopic } from '../lib/quiz.js'
+import { lastScoresByTopic, REVIEW_THRESHOLD } from '../lib/quiz.js'
 
-const REVIEW_THRESHOLD = 60
-
-export default function NextUp({ userId, onNavigate }) {
+export default function NextUp({ userId, onNavigate, onStartQuiz }) {
   const [data, setData] = useState(null)
 
   useEffect(() => {
@@ -119,9 +117,14 @@ export default function NextUp({ userId, onNavigate }) {
           <ul className="nextup-topics">
             {reviewTopics.map(tp => (
               <li key={tp.id}>
-                {tp.title}
-                <span className="nextup-subject"> · {subjectById[tp.subject_id]?.name}</span>
-                <span className="nextup-score">{scores[tp.id].correct}/{scores[tp.id].total} im letzten Quiz</span>
+                <button
+                  type="button" className="nextup-review-btn"
+                  onClick={() => onStartQuiz({ topicId: tp.id, label: tp.title, subjectName: subjectById[tp.subject_id]?.name })}
+                >
+                  {tp.title}
+                  <span className="nextup-subject"> · {subjectById[tp.subject_id]?.name}</span>
+                  <span className="nextup-score">{scores[tp.id].correct}/{scores[tp.id].total} in der letzten Abfrage</span>
+                </button>
               </li>
             ))}
           </ul>

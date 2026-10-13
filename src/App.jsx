@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { LayoutDashboard, BookOpen, Route, ListChecks, Link2, Settings as SettingsIcon, Menu } from 'lucide-react'
+import { LayoutDashboard, BookOpen, GraduationCap, Route, ListChecks, Link2, Settings as SettingsIcon, Menu } from 'lucide-react'
 import { supabase, supabaseConfigured, supabaseConfigError } from './supabaseClient.js'
 import { APP_NAME, STORAGE_PREFIX } from './config.js'
 import { fmtLong } from './lib/dates.js'
@@ -22,6 +22,7 @@ import StudyPlanTimeline from './components/StudyPlanTimeline.jsx'
 import LinksView from './components/LinksView.jsx'
 import Planner from './components/planner/Planner.jsx'
 import SettingsView from './components/Settings.jsx'
+import QuizView from './components/quiz/QuizView.jsx'
 
 const SIDEBAR_BREAKPOINT = 820
 const SIDEBAR_COLLAPSED_KEY = `${STORAGE_PREFIX}:sidebar-collapsed`
@@ -37,6 +38,7 @@ function getInitialSidebarCollapsed() {
 const SECTIONS = [
   { id: 'overview', label: 'Übersicht', icon: LayoutDashboard },
   { id: 'learning', label: 'Lernen', icon: BookOpen },
+  { id: 'quiz', label: 'Abfragen', icon: GraduationCap },
   { id: 'planner', label: 'Planer', icon: Route },
   { id: 'organisation', label: 'Organisation', icon: ListChecks },
   { id: 'links', label: 'Links', icon: Link2 },
@@ -88,6 +90,7 @@ function Dashboard({ session }) {
   const [plannerTab, setPlannerTab] = useState('goals')
   const [collapsed, setCollapsed] = useState(getInitialSidebarCollapsed)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [quizRequest, setQuizRequest] = useState(null)
 
   useEffect(() => { loadSettings() }, [userId])
 
@@ -100,6 +103,12 @@ function Dashboard({ session }) {
     setActiveSection(section)
     if (tab) setPlannerTab(tab)
     window.scrollTo({ top: 0 })
+  }
+
+  // Abfrage von überall starten (Lernen, Übersicht) — läuft im Abfragen-Tab.
+  function startQuiz(target) {
+    setQuizRequest({ mode: target.subjectId ? 'subject' : 'topic', ...target })
+    navigate('quiz')
   }
 
   function toggleCollapsed() {
@@ -151,7 +160,7 @@ function Dashboard({ session }) {
         {activeSection === 'overview' && (
           <div className="plan-section">
             <StatusBar userId={userId} onNavigate={navigate} />
-            <NextUp userId={userId} onNavigate={navigate} />
+            <NextUp userId={userId} onNavigate={navigate} onStartQuiz={startQuiz} />
             <OverviewSummary userId={userId} onNavigate={navigate} />
             <WeeklyReview userId={userId} />
           </div>
@@ -162,11 +171,20 @@ function Dashboard({ session }) {
             <WeeklyFocusCard userId={userId} onNavigate={navigate} />
             <StudyTimer userId={userId} />
             <div className="plan-two-col">
-              <StudyPlanTopics userId={userId} onNavigate={navigate} />
+              <StudyPlanTopics userId={userId} onNavigate={navigate} onStartQuiz={startQuiz} />
               <StudyBurndown userId={userId} onNavigate={navigate} />
             </div>
             <ProgressCard userId={userId} onNavigate={navigate} />
           </div>
+        )}
+
+        {activeSection === 'quiz' && (
+          <QuizView
+            userId={userId}
+            request={quizRequest}
+            onRequestHandled={() => setQuizRequest(null)}
+            onNavigate={navigate}
+          />
         )}
 
         {activeSection === 'planner' && (
