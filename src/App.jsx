@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { LayoutDashboard, BookOpen, Route, ListChecks, Link2, Settings as SettingsIcon, Menu } from 'lucide-react'
-import { supabase, supabaseConfigured } from './supabaseClient.js'
+import { supabase, supabaseConfigured, supabaseConfigError } from './supabaseClient.js'
 import { APP_NAME, STORAGE_PREFIX } from './config.js'
 import { fmtLong } from './lib/dates.js'
 import Auth, { SetNewPassword } from './components/Auth.jsx'
@@ -69,10 +69,7 @@ export default function App() {
         <div className="auth-card">
           <BrandMark className="auth-mark" />
           <h1 className="auth-title">{APP_NAME}</h1>
-          <p className="auth-config-warning">
-            Supabase ist noch nicht konfiguriert. Trage VITE_SUPABASE_URL und
-            VITE_SUPABASE_ANON_KEY in deiner .env-Datei ein (siehe README.md).
-          </p>
+          <p className="auth-config-warning">{supabaseConfigError}</p>
         </div>
       </div>
     )
