@@ -8,6 +8,7 @@ import { TEMPLATES, defaultStartDate, shiftDaysFor, templateStats } from '../tem
 const EXPORT_TABLES = [
   'settings', 'goals', 'plan_phases', 'plan_subjects', 'plan_topics', 'plan_subtasks',
   'plan_weeks', 'plan_deadlines', 'tasks', 'events', 'study_sessions', 'progress_snapshots', 'links',
+  'quiz_attempts', 'ai_usage',
 ]
 
 export default function SettingsView({ userId, email, settings, onSettingsChange, onNavigate }) {

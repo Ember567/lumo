@@ -3,6 +3,9 @@ import { supabase } from '../supabaseClient.js'
 import { onPlanChanged } from '../lib/progress.js'
 import { PRIORITY_ORDER } from '../lib/plan.js'
 import { currentPhaseOf, daysUntil, fmtDate, parseDate, today } from '../lib/dates.js'
+import { lastScoresByTopic } from '../lib/quiz.js'
+
+const REVIEW_THRESHOLD = 60
 
 export default function NextUp({ userId, onNavigate }) {
   const [data, setData] = useState(null)
@@ -13,17 +16,18 @@ export default function NextUp({ userId, onNavigate }) {
   }, [userId])
 
   async function load() {
-    const [{ data: phases }, { data: subjects }, { data: topics }, { data: deadlines }] = await Promise.all([
+    const [{ data: phases }, { data: subjects }, { data: topics }, { data: deadlines }, scores] = await Promise.all([
       supabase.from('plan_phases').select('*').eq('user_id', userId),
       supabase.from('plan_subjects').select('id, name, priority').eq('user_id', userId),
       supabase.from('plan_topics').select('*').eq('user_id', userId).order('sort_order'),
       supabase.from('plan_deadlines').select('*').eq('user_id', userId).order('date'),
+      lastScoresByTopic(userId),
     ])
-    setData({ phases: phases || [], subjects: subjects || [], allTopics: topics || [], deadlines: deadlines || [] })
+    setData({ phases: phases || [], subjects: subjects || [], allTopics: topics || [], deadlines: deadlines || [], scores })
   }
 
   if (!data) return null
-  const { phases, subjects, allTopics, deadlines } = data
+  const { phases, subjects, allTopics, deadlines, scores } = data
   const topics = allTopics.filter(tp => !tp.done)
 
   if (subjects.length === 0) {
@@ -44,6 +48,12 @@ export default function NextUp({ userId, onNavigate }) {
       (PRIORITY_ORDER[subjectById[a.subject_id]?.priority] ?? 9) - (PRIORITY_ORDER[subjectById[b.subject_id]?.priority] ?? 9)
       || a.sort_order - b.sort_order
     )
+    .slice(0, 3)
+
+  // Themen, deren letztes Quiz unter der Schwelle lag — schwächstes zuerst.
+  const reviewTopics = allTopics
+    .filter(tp => scores[tp.id] && scores[tp.id].pct < REVIEW_THRESHOLD)
+    .sort((a, b) => scores[a.id].pct - scores[b.id].pct)
     .slice(0, 3)
 
   const t = today()
@@ -102,6 +112,21 @@ export default function NextUp({ userId, onNavigate }) {
           )}
         </div>
       </div>
+
+      {reviewTopics.length > 0 && (
+        <div className="nextup-review">
+          <h3>Wiederholen</h3>
+          <ul className="nextup-topics">
+            {reviewTopics.map(tp => (
+              <li key={tp.id}>
+                {tp.title}
+                <span className="nextup-subject"> · {subjectById[tp.subject_id]?.name}</span>
+                <span className="nextup-score">{scores[tp.id].correct}/{scores[tp.id].total} im letzten Quiz</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {currentPhase && phaseTopicsTotal > 0 && (
         <p className="nextup-rhythm">

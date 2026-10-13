@@ -19,6 +19,7 @@ Live: **https://lumo.berendak.ch**
 | **Übersicht** | Status aller Ziele, nächste Themen nach Priorität, nächste Frist, empfohlenes Lerntempo, Wochenrückblick. |
 | **Organisation** | Aufgaben, Termine und ein Zeitstrahl mit Phasen, Fristen und Terminen. |
 | **Vorlagen** | Startklare Lernpläne beim Onboarding oder später dazuladen. Alle Daten werden auf ein frei wählbares Startdatum verschoben. Mitgeliefert: *Passerelle + EMS (Schweiz)* mit 110 Themen nach den SBFI-Richtlinien 2023, und ein kleiner Beispielplan. |
+| **KI-Quiz** | Zu jedem Thema oder ganzen Fach erzeugt eine KI Multiple-Choice-Fragen mit Erklärungen. Das letzte Ergebnis steht am Thema, schwache Themen schlägt die Übersicht zum Wiederholen vor. |
 | **Datenschutz** | Jede Person sieht nur ihre eigenen Daten. Export aller Daten als JSON, Plan zurücksetzen, Konto inkl. aller Daten löschen. |
 
 ## Technik
@@ -46,6 +47,18 @@ Die App spricht direkt mit der Datenbank; geschützt wird auf Datenbankebene:
 - Ziel mit Stunden-Messung: geloggte Timer-Stunden ÷ Stundenziel.
 - Der Verlauf speichert nur Meilensteine (alle 10 %), damit er lesbar bleibt.
 
+### KI-Quiz (`supabase/functions/quiz`)
+
+- Läuft als **Supabase Edge Function** — der API-Key des KI-Anbieters liegt als Secret
+  auf dem Server und kommt nie in den Browser.
+- Anbieter austauschbar: jede OpenAI-kompatible API. Standard ist **Groq** mit
+  `openai/gpt-oss-120b` und strikt validiertem JSON-Schema.
+- An die KI gehen nur Fach-, Themen- und Lernziel-Titel, keine persönlichen Daten.
+- Die Antwort wird geprüft (genau 4 eindeutige Optionen, gültiger Index), die
+  Antwortreihenfolge serverseitig gemischt; bei unbrauchbarer Antwort ein zweiter Versuch.
+- **Tageslimits** (pro Nutzer und global) werden atomar in der Datenbank verbucht
+  (`consume_ai_quota`, nur für den Server aufrufbar), damit das Gratis-Kontingent reicht.
+
 ---
 
 ## Einrichtung
@@ -62,6 +75,18 @@ Reihenfolge: **1. Supabase → 2. Lokal testen → 3. Vercel → 4. Domain bei H
    - *Site URL:* `https://lumo.berendak.ch`
    - *Redirect URLs:* `https://lumo.berendak.ch/**` und `http://localhost:5173/**`
 4. **Project Settings → API**: `Project URL` und `anon public` Key kopieren.
+
+### 1b. KI-Quiz einrichten
+
+1. Bei [console.groq.com](https://console.groq.com) einen API-Key erstellen (gratis).
+2. Bestehende Datenbank: [`supabase/migrations/002_quiz.sql`](supabase/migrations/002_quiz.sql)
+   im SQL-Editor ausführen (bei neuer DB ist es in `schema.sql` schon enthalten).
+3. **Edge Functions → Deploy a new function → Via Editor**, Name `quiz`, Inhalt von
+   [`supabase/functions/quiz/index.ts`](supabase/functions/quiz/index.ts) einfügen, deployen.
+   Alternativ mit der Supabase CLI: `supabase functions deploy quiz`.
+4. **Edge Functions → Secrets:** `AI_API_KEY` = dein Groq-Key.
+   Optional: `AI_MODEL`, `AI_BASE_URL` (anderer Anbieter), `AI_DAILY_LIMIT_USER` (Standard 20),
+   `AI_DAILY_LIMIT_GLOBAL` (Standard 800).
 
 ### 2. Lokal starten
 
@@ -99,7 +124,10 @@ npm run dev               # http://localhost:5173
 ## Projektstruktur
 
 ```
-├── supabase/schema.sql          Komplettes Datenbankschema (Tabellen, RLS, Funktionen)
+├── supabase/
+│   ├── schema.sql               Komplettes Datenbankschema (Tabellen, RLS, Funktionen)
+│   ├── migrations/002_quiz.sql  KI-Quiz für bestehende Datenbanken
+│   └── functions/quiz/index.ts  Edge Function: Fragen per KI erzeugen
 ├── src/
 │   ├── App.jsx                  Login-Weiche, Onboarding, Navigation
 │   ├── config.js                App-Name und Claim
@@ -118,6 +146,7 @@ npm run dev               # http://localhost:5173
 │       ├── StudyPlanTopics.jsx  Themen-Checkliste
 │       ├── StudyBurndown.jsx    Soll/Ist pro Phase
 │       ├── Progress.jsx         Fortschritt + Verlauf pro Ziel
+│       ├── QuizDialog.jsx       KI-Quiz: Fragen, Auswertung, Erklärungen
 │       ├── planner/             Editoren: Ziele, Fächer & Themen, Phasen, Wochen, Fristen
 │       ├── Settings.jsx         Profil, Vorlagen, Export, Reset, Konto löschen
 │       └── …                    Aufgaben, Kalender, Zeitstrahl, Links, Übersicht
