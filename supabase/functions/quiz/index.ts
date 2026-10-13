@@ -223,7 +223,7 @@ function plainMath(input: string): string {
       .replace(/\\(?:text|mathrm|mathbf|operatorname)\{([^{}]*)\}/g, '$1')
       .replace(/\\[dt]?frac\{([^{}]*)\}\{([^{}]*)\}/g, (_, a, b) => `${wrap(a.trim())}/${wrap(b.trim())}`)
       .replace(/\\sqrt\{([^{}]*)\}/g, (_, a) => `√${wrap(a.trim())}`)
-      .replace(/\\lim_\{([^{}]*)\}/g, 'lim($1)')
+      .replace(/\\?lim_\{([^{}]*)\}/g, 'lim($1)')
       .replace(/\\int_\{?([^{}\s^]*)\}?\^\{?([^{}\s]*)\}?/g, '∫ von $1 bis $2 ')
       .replace(/\^\{([^{}]*)\}/g, (_, a) => mapChars(a, SUP) ?? `^(${a})`)
       .replace(/_\{([^{}]*)\}/g, (_, a) => mapChars(a, SUB) ?? `_(${a})`)
@@ -231,7 +231,7 @@ function plainMath(input: string): string {
   }
   s = s.replace(/\\([A-Za-z]+)/g, (_, name) => SYMBOLS[name] ?? name)
   s = s.replace(/\^([0-9n])/g, (_, c) => SUP[c]).replace(/_([0-9])/g, (_, c) => SUB[c])
-  s = s.replace(/lim\(([^)]*)\)/g, (_, a) => `lim(${a.replace(/\s+/g, '')})`)
+  s = s.replace(/lim_\(/g, 'lim(').replace(/lim\(([^)]*)\)/g, (_, a) => `lim(${a.replace(/\s+/g, '')})`)
   return s.replace(/[{}]/g, '').replace(/[ \t]{2,}/g, ' ').trim()
 }
 
