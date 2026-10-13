@@ -281,6 +281,16 @@ begin
   end loop;
 end $$;
 
+-- ------------------------------------------------------------
+-- RECHTE — angemeldete Nutzer dürfen die Tabellen ansprechen (welche
+-- Zeilen, regelt RLS oben). Nicht angemeldete (anon) bekommen nichts.
+-- Ausdrücklich gesetzt, damit das Schema unabhängig von der
+-- Projekt-Einstellung "Automatically expose new tables" funktioniert.
+-- ------------------------------------------------------------
+grant usage on schema public to authenticated;
+grant select, insert, update, delete on all tables in schema public to authenticated;
+revoke all on all tables in schema public from anon;
+
 -- ============================================================
 -- FUNKTIONEN (per supabase.rpc() aus dem Frontend aufgerufen)
 -- ============================================================
