@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { supabase } from '../supabaseClient.js'
 import { APP_NAME } from '../config.js'
 import { recordProgress } from '../lib/progress.js'
 import { toISODate } from '../lib/dates.js'
+import { isLumiHidden, setLumiHidden, onLumiVisibility, clearChat } from '../lib/coach.js'
+import LumiFace from './coach/LumiFace.jsx'
 import { TEMPLATES, defaultStartDate, shiftDaysFor, templateStats } from '../templates/index.js'
 
 const EXPORT_TABLES = [
@@ -11,10 +13,41 @@ const EXPORT_TABLES = [
   'quiz_attempts', 'ai_usage',
 ]
 
+function LumiCard({ userId }) {
+  const [hidden, setHidden] = useState(isLumiHidden)
+  const [cleared, setCleared] = useState(false)
+  useEffect(() => onLumiVisibility(() => setHidden(isLumiHidden())), [])
+  return (
+    <section className="card">
+      <div className="card-head"><h2>Lernbegleiter Lumi</h2></div>
+      <div className="lumi-settings">
+        <LumiFace mood={hidden ? 'sleepy' : 'happy'} size={52} />
+        <div>
+          <p className="field-hint">
+            Lumi kennt deinen Lernstand, gibt Tipps und beantwortet Fragen. An die KI gehen nur Titel deiner Ziele, Fächer,
+            Themen, Fristen und Aufgaben sowie deine Lernzeit, keine E-Mail-Adresse. Der Chatverlauf bleibt auf diesem Gerät.
+          </p>
+          <div className="lumi-settings-actions">
+            <label className="lumi-toggle">
+              <input type="checkbox" checked={!hidden} onChange={e => setLumiHidden(!e.target.checked)} />
+              Lumi anzeigen
+            </label>
+            <button type="button" className="btn btn-sm btn-ghost" disabled={cleared}
+              onClick={() => { clearChat(userId); setCleared(true) }}>
+              {cleared ? 'Verlauf gelöscht' : 'Chatverlauf löschen'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 export default function SettingsView({ userId, email, settings, onSettingsChange, onNavigate }) {
   return (
     <div className="plan-section settings-page">
       <ProfileCard userId={userId} email={email} settings={settings} onSettingsChange={onSettingsChange} />
+      <LumiCard userId={userId} />
       <TemplateCard userId={userId} onNavigate={onNavigate} />
       <DataCard userId={userId} onSettingsChange={onSettingsChange} />
     </div>

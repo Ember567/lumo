@@ -23,6 +23,7 @@ import LinksView from './components/LinksView.jsx'
 import Planner from './components/planner/Planner.jsx'
 import SettingsView from './components/Settings.jsx'
 import QuizView from './components/quiz/QuizView.jsx'
+import CoachWidget from './components/coach/CoachWidget.jsx'
 
 const SIDEBAR_BREAKPOINT = 820
 const SIDEBAR_COLLAPSED_KEY = `${STORAGE_PREFIX}:sidebar-collapsed`
@@ -219,6 +220,8 @@ function Dashboard({ session }) {
 
         <footer className="foot">{APP_NAME} · deine Ziele, deine Daten</footer>
       </div>
+
+      <CoachWidget userId={userId} section={activeSection} onNavigate={navigate} onStartQuiz={startQuiz} />
     </div>
   )
 }

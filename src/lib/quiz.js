@@ -85,7 +85,7 @@ export async function loadQuizData(userId) {
       .eq('user_id', userId)
       .order('created_at', { ascending: false }).limit(40),
     supabase.from('ai_usage').select('id', { count: 'exact', head: true })
-      .eq('user_id', userId).gte('created_at', dayStart.toISOString()),
+      .eq('user_id', userId).eq('kind', 'quiz').gte('created_at', dayStart.toISOString()),
   ])
   return {
     subjects: subjects.data || [],

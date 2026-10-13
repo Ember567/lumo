@@ -20,6 +20,7 @@ Live: **https://lumo.berendak.ch**
 | **Organisation** | Aufgaben, Termine und ein Zeitstrahl mit Phasen, Fristen und Terminen. |
 | **Vorlagen** | Startklare Lernpläne beim Onboarding oder später dazuladen. Alle Daten werden auf ein frei wählbares Startdatum verschoben. Mitgeliefert: *Passerelle + EMS (Schweiz)* mit 110 Themen nach den SBFI-Richtlinien 2023, und ein kleiner Beispielplan. |
 | **Abfragen (KI)** | Eigener Bereich zum Ausfragen: Thema oder ganzes Fach wählen, die KI erstellt Multiple-Choice-Fragen. Frage für Frage mit sofortigem Feedback und Erklärung, danach Auswertung. Vorschläge (schwache, erledigte aber nie abgefragte, lange nicht geübte Themen), Stand pro Fach, Verlauf und ein Fehlerheft, dessen Fragen sich ohne KI erneut üben lassen. |
+| **Lernbegleiter Lumi** | Ein kleines animiertes Maskottchen unten rechts. Lumis Stimmung folgt deinem Lernstand (stolz nach einer guten Abfrage, besorgt bei knapper Frist, müde spät in der Nacht), und Lumi gibt von sich aus Tipps: nächstes Thema, schwache Themen, Rückstand im Phasenplan. Im Chat beantwortet Lumi Fragen zu deinem Plan, erklärt Stoff und schlägt Aktionen vor (Abfrage starten, Bereich öffnen, Aufgabe anlegen), die du per Klick ausführst. |
 | **Datenschutz** | Jede Person sieht nur ihre eigenen Daten. Export aller Daten als JSON, Plan zurücksetzen, Konto inkl. aller Daten löschen. |
 
 ## Technik
@@ -38,6 +39,15 @@ Die App spricht direkt mit der Datenbank; geschützt wird auf Datenbankebene:
 - **Kaskadierendes Löschen**: Wird ein Konto gelöscht, verschwinden alle Daten.
 - Vorlagen-Import (`import_template`) und Zurücksetzen (`reset_my_data`) laufen als
   Datenbankfunktionen in **einer Transaktion** mit den Rechten der aufrufenden Person.
+
+### Lernbegleiter Lumi (`src/lib/coach.js`, `supabase/functions/coach`)
+
+- Stimmung und Tipps entstehen **ohne KI** aus Regeln (Lernzeit, Abfragen, Phase, Fristen) — kein Kontingent nötig.
+- Für den Chat fasst die App den Lernstand als kurzen Text zusammen. Themen und Fächer tragen Kürzel (`T1`, `S2`),
+  die KI antwortet mit diesen Kürzeln; erst die App übersetzt sie zurück. So sieht die KI keine Datenbank-IDs.
+- Antworten kommen als striktes JSON (`reply`, `mood`, `actions`), werden serverseitig geprüft, ungültige Aktionen verworfen.
+- Lumi ändert nie selbst Daten: Aktionen sind Vorschläge, die du anklickst.
+- Eigenes Modell und eigenes Tageslimit (`openai/gpt-oss-20b`, 30 Nachrichten pro Person), getrennt vom Quiz.
 
 ### Fortschrittslogik (`src/lib/progress.js`)
 
@@ -84,9 +94,11 @@ Reihenfolge: **1. Supabase → 2. Lokal testen → 3. Vercel → 4. Domain bei H
 3. **Edge Functions → Deploy a new function → Via Editor**, Name `quiz`, Inhalt von
    [`supabase/functions/quiz/index.ts`](supabase/functions/quiz/index.ts) einfügen, deployen.
    Alternativ mit der Supabase CLI: `supabase functions deploy quiz`.
-4. **Edge Functions → Secrets:** `AI_API_KEY` = dein Groq-Key.
+4. Gleich für den Lernbegleiter: [`supabase/migrations/003_coach.sql`](supabase/migrations/003_coach.sql) ausführen
+   und eine zweite Function `coach` mit [`supabase/functions/coach/index.ts`](supabase/functions/coach/index.ts) anlegen.
+5. **Edge Functions → Secrets:** `AI_API_KEY` = dein Groq-Key (gilt für beide Functions).
    Optional: `AI_MODEL`, `AI_BASE_URL` (anderer Anbieter), `AI_DAILY_LIMIT_USER` (Standard 20),
-   `AI_DAILY_LIMIT_GLOBAL` (Standard 800).
+   `AI_DAILY_LIMIT_GLOBAL` (Standard 800), `AI_CHAT_MODEL`, `AI_CHAT_DAILY_LIMIT_USER` (30), `AI_CHAT_DAILY_LIMIT_GLOBAL` (200).
 
 ### 2. Lokal starten
 
@@ -126,8 +138,8 @@ npm run dev               # http://localhost:5173
 ```
 ├── supabase/
 │   ├── schema.sql               Komplettes Datenbankschema (Tabellen, RLS, Funktionen)
-│   ├── migrations/002_quiz.sql  KI-Quiz für bestehende Datenbanken
-│   └── functions/quiz/index.ts  Edge Function: Fragen per KI erzeugen
+│   ├── migrations/              002 KI-Quiz, 003 Lernbegleiter (für bestehende Datenbanken)
+│   └── functions/               quiz: Fragen per KI · coach: Lernbegleiter Lumi
 ├── src/
 │   ├── App.jsx                  Login-Weiche, Onboarding, Navigation
 │   ├── config.js                App-Name und Claim
@@ -146,6 +158,7 @@ npm run dev               # http://localhost:5173
 │       ├── StudyPlanTopics.jsx  Themen-Checkliste
 │       ├── StudyBurndown.jsx    Soll/Ist pro Phase
 │       ├── Progress.jsx         Fortschritt + Verlauf pro Ziel
+│       ├── coach/               Lumi: Maskottchen, Tipps, Chat
 │       ├── quiz/                Abfragen-Bereich: Start, Statistik, Fehlerheft, laufende Abfrage
 │       ├── planner/             Editoren: Ziele, Fächer & Themen, Phasen, Wochen, Fristen
 │       ├── Settings.jsx         Profil, Vorlagen, Export, Reset, Konto löschen
