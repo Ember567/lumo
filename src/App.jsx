@@ -23,7 +23,8 @@ import LinksView from './components/LinksView.jsx'
 import Planner from './components/planner/Planner.jsx'
 import SettingsView from './components/Settings.jsx'
 import QuizView from './components/quiz/QuizView.jsx'
-import CoachWidget from './components/coach/CoachWidget.jsx'
+import LumiCompanion from './components/lumi/LumiCompanion.jsx'
+import { lumiEmit } from './lib/lumi.js'
 
 const SIDEBAR_BREAKPOINT = 820
 const SIDEBAR_COLLAPSED_KEY = `${STORAGE_PREFIX}:sidebar-collapsed`
@@ -102,6 +103,7 @@ function Dashboard({ session }) {
 
   function navigate(section, tab) {
     setActiveSection(section)
+    lumiEmit('section', { section })
     if (tab) setPlannerTab(tab)
     window.scrollTo({ top: 0 })
   }
@@ -221,7 +223,7 @@ function Dashboard({ session }) {
         <footer className="foot">{APP_NAME} · deine Ziele, deine Daten</footer>
       </div>
 
-      <CoachWidget userId={userId} section={activeSection} onNavigate={navigate} onStartQuiz={startQuiz} />
+      <LumiCompanion userId={userId} section={activeSection} onNavigate={navigate} onStartQuiz={startQuiz} />
     </div>
   )
 }

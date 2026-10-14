@@ -4,6 +4,7 @@ import { onPlanChanged, onScrollToTopics, recordProgress } from '../lib/progress
 import { priorityClass, sortSubjects } from '../lib/plan.js'
 import { Sparkles } from 'lucide-react'
 import { lastScoresByTopic, scoreClass } from '../lib/quiz.js'
+import { lumiEmit } from '../lib/lumi.js'
 
 // Gruppiert Themen (bereits nach sort_order sortiert) nach category, ohne
 // die Reihenfolge zu verändern. Themen ohne category (Deutsch/Englisch)
@@ -100,13 +101,23 @@ export default function StudyPlanTopics({ userId, onNavigate, onStartQuiz }) {
   // Subtask togglen: aktualisiert lokal sofort (optimistic), synct danach die
   // DB. Wenn dadurch alle Subtasks eines Themas erledigt/nicht mehr alle
   // erledigt sind, wird das Thema automatisch mitgezogen (in beide Richtungen).
-  async function toggleSubtask(subtask, topic) {
+  // Lumi soll mitfeiern: wie viele Themen im Fach sind danach noch offen?
+  function celebrate(topic, el) {
+    const subject = subjects.find(s => s.id === topic.subject_id)
+    const open = topics.filter(t => t.subject_id === topic.subject_id && !t.done && t.id !== topic.id).length
+    lumiEmit('topic-done', { el, title: topic.title, subjectName: subject?.name || '', openInSubject: open, subjectDone: open === 0 })
+  }
+
+  async function toggleSubtask(subtask, topic, el) {
     const nextDone = !subtask.is_done
     const nextDoneAt = nextDone ? new Date().toISOString() : null
     const siblings = subtasksByTopic[topic.id] || []
     const updatedSiblings = siblings.map(st => st.id === subtask.id ? { ...st, is_done: nextDone } : st)
     const allDone = updatedSiblings.length > 0 && updatedSiblings.every(st => st.is_done)
     const topicChanges = allDone !== topic.done
+    if (topicChanges && allDone) celebrate(topic, el)
+    else if (nextDone) lumiEmit('subtask-done', { el })
+    else if (topicChanges) lumiEmit('topic-undone', { el })
 
     setSubtasksByTopic(prev => ({
       ...prev,
@@ -126,9 +137,11 @@ export default function StudyPlanTopics({ userId, onNavigate, onStartQuiz }) {
 
   // Themen-Checkbox: ohne Subtasks bleibt es binär wie bisher. Mit Subtasks
   // togglet die Checkbox alle zugehörigen Subtasks gemeinsam.
-  async function toggleTopic(topic) {
+  async function toggleTopic(topic, el) {
     const subtasks = subtasksByTopic[topic.id] || []
     const done = !topic.done
+    if (done) celebrate(topic, el)
+    else lumiEmit('topic-undone', { el })
     const doneAt = done ? new Date().toISOString() : null
 
     setTopics(prev => prev.map(t => t.id === topic.id ? { ...t, done, completed_at: doneAt } : t))
@@ -226,10 +239,11 @@ export default function StudyPlanTopics({ userId, onNavigate, onStartQuiz }) {
                       <li
                         key={t.id}
                         ref={el => { topicRefs.current[t.id] = el }}
+                        data-topic-id={t.id} data-topic-title={t.title}
                         className={`topic-item ${t.done ? 'done' : ''} ${isHighlighted ? 'highlight' : ''}`}
                       >
                         <div className="topic-row">
-                          <input type="checkbox" checked={t.done} onChange={() => toggleTopic(t)} aria-label={`${t.title} erledigt`} />
+                          <input type="checkbox" checked={t.done} onChange={e => toggleTopic(t, e.currentTarget)} aria-label={`${t.title} erledigt`} />
                           {subtasks.length > 0 ? (
                             <button
                               type="button"
@@ -265,7 +279,7 @@ export default function StudyPlanTopics({ userId, onNavigate, onStartQuiz }) {
                           <ul className="subtask-list">
                             {subtasks.map(st => (
                               <li key={st.id} className={`subtask-item ${st.is_done ? 'done' : ''}`}>
-                                <input type="checkbox" checked={st.is_done} onChange={() => toggleSubtask(st, t)} aria-label={`${st.title} erledigt`} />
+                                <input type="checkbox" checked={st.is_done} onChange={e => toggleSubtask(st, t, e.currentTarget)} aria-label={`${st.title} erledigt`} />
                                 <span className="subtask-title">{st.title}</span>
                               </li>
                             ))}

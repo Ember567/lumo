@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Check, X, ArrowRight, RotateCcw, Sparkles, Repeat } from 'lucide-react'
 import { generateQuiz, saveAttempt, scoreClass, pct, reshuffle } from '../../lib/quiz.js'
 import { notifyPlanChanged } from '../../lib/progress.js'
+import { lumiEmit } from '../../lib/lumi.js'
 
 const LETTERS = ['A', 'B', 'C', 'D']
 const KEY_TO_INDEX = { 1: 0, 2: 1, 3: 2, 4: 3, a: 0, b: 1, c: 2, d: 3 }
@@ -83,9 +84,10 @@ export default function QuizSession({ userId, target, onExit, onQuota }) {
   const score = pct(correctCount, questions.length)
   const wrongQuestions = questions.filter((qq, i) => answers[i] !== qq.correct_index)
 
-  function choose(oi) {
+  function choose(oi, el) {
     if (phase !== 'answering' || revealed) return
     setAnswers(list => list.map((a, i) => (i === index ? oi : a)))
+    lumiEmit('quiz-answer', { el: el || rootRef.current?.querySelectorAll('.quiz-option')[oi], correct: oi === q.correct_index })
   }
 
   useEffect(() => {
@@ -100,6 +102,8 @@ export default function QuizSession({ userId, target, onExit, onQuota }) {
       notifyPlanChanged()
     }
     setPhase('result')
+    const right = questions.filter((qq, i) => answers[i] === qq.correct_index).length
+    lumiEmit('quiz-finish', { el: rootRef.current, pct: pct(right, questions.length) })
   }
 
   // Tastatur: 1–4 bzw. A–D wählt, Enter geht weiter.
@@ -176,7 +180,7 @@ export default function QuizSession({ userId, target, onExit, onQuota }) {
               return (
                 <button
                   key={oi} type="button" role="radio" aria-checked={oi === chosen}
-                  className={`quiz-option ${state}`} disabled={revealed} onClick={() => choose(oi)}
+                  className={`quiz-option ${state}`} disabled={revealed} onClick={e => choose(oi, e.currentTarget)}
                 >
                   <span className="quiz-letter">
                     {revealed && oi === q.correct_index ? <Check size={13} strokeWidth={3} />

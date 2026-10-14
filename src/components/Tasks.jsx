@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../supabaseClient.js'
+import { lumiEmit } from '../lib/lumi.js'
 import { fmtDate } from '../lib/dates.js'
 import { goalColor } from '../lib/plan.js'
 
@@ -31,7 +32,8 @@ export default function Tasks({ userId }) {
     if (!error) { setTitle(''); setDue(''); load() }
   }
 
-  async function toggleDone(task) {
+  async function toggleDone(task, el) {
+    if (!task.done) lumiEmit('task-done', { el })
     setTasks(list => list.map(t => (t.id === task.id ? { ...t, done: !t.done } : t)))
     await supabase.from('tasks').update({ done: !task.done }).eq('id', task.id)
     load()
@@ -67,7 +69,7 @@ export default function Tasks({ userId }) {
           const goal = goalById[t.goal_id]
           return (
             <li key={t.id} className={`task-item ${t.done ? 'done' : ''}`}>
-              <input type="checkbox" checked={t.done} onChange={() => toggleDone(t)} aria-label={`${t.title} erledigt`} />
+              <input type="checkbox" checked={t.done} onChange={e => toggleDone(t, e.currentTarget)} aria-label={`${t.title} erledigt`} />
               <span className="task-title">{t.title}</span>
               {goal && <span className="task-tag" style={{ '--tag': goalColor(goal) }}>{goal.name}</span>}
               {t.due_date && <span className="task-due">{fmtDate(t.due_date)}</span>}

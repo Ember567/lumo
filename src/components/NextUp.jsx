@@ -82,7 +82,7 @@ export default function NextUp({ userId, onNavigate, onStartQuiz }) {
           <h3>Nächste Themen</h3>
           <ul className="nextup-topics">
             {nextTopics.map(tp => (
-              <li key={tp.id}>
+              <li key={tp.id} data-topic-id={tp.id} data-topic-title={tp.title}>
                 {tp.title}
                 <span className="nextup-subject"> · {subjectById[tp.subject_id]?.name}</span>
               </li>
@@ -116,7 +116,7 @@ export default function NextUp({ userId, onNavigate, onStartQuiz }) {
           <h3>Wiederholen</h3>
           <ul className="nextup-topics">
             {reviewTopics.map(tp => (
-              <li key={tp.id}>
+              <li key={tp.id} data-topic-id={tp.id} data-topic-title={tp.title}>
                 <button
                   type="button" className="nextup-review-btn"
                   onClick={() => onStartQuiz({ topicId: tp.id, label: tp.title, subjectName: subjectById[tp.subject_id]?.name })}

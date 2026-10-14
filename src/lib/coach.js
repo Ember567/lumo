@@ -129,13 +129,13 @@ export async function loadCoachState(userId) {
   }
   if (weak[0]) {
     const s = scores[weak[0].id]
-    tips.push({ id: `weak-${weak[0].id}-${s.at}`, text: `«${weak[0].title}» war in der letzten Abfrage knapp (${s.correct}/${s.total}). Noch eine Runde?`, actions: [quizAction(weak[0], 'Nochmal abfragen')] })
+    tips.push({ id: `weak-${weak[0].id}-${s.at}`, topicId: weak[0].id, text: `«${weak[0].title}» war in der letzten Abfrage knapp (${s.correct}/${s.total}). Noch eine Runde?`, actions: [quizAction(weak[0], 'Nochmal abfragen')] })
   }
   if (todayMin === 0 && nextTopic && mood !== 'sleepy') {
     const why = focusOpen[0] === nextTopic ? 'Es steht im Wochenfokus.'
       : phaseOpen[0] === nextTopic ? `Es gehört zur Phase «${phase.name}».`
         : `${subjectName(nextTopic)} hat Priorität «${subjectById[nextTopic.subject_id]?.priority}».`
-    tips.push({ id: `next-${nextTopic.id}`, text: `Heute noch nichts gelernt. Wie wär's mit «${nextTopic.title}»? ${why}`, actions: [{ type: 'open_section', label: 'Los geht\'s', section: 'learning' }, quizAction(nextTopic, 'Erst abfragen')] })
+    tips.push({ id: `next-${nextTopic.id}`, topicId: nextTopic.id, text: `Heute noch nichts gelernt. Wie wär's mit «${nextTopic.title}»? ${why}`, actions: [{ type: 'open_section', label: 'Los geht\'s', section: 'learning' }, quizAction(nextTopic, 'Erst abfragen')] })
   }
   if (phaseStatus && phaseStatus.behind >= 3) {
     tips.push({ id: `behind-${phaseStatus.behind}`, text: `In der Phase «${phase.name}» liegst du ${phaseStatus.behind} Themen hinter dem Plan. Wollen wir das zusammen sortieren?`, actions: [{ type: 'chat', label: 'Wie hole ich auf?', prompt: 'Ich liege hinter dem Plan. Wie hole ich realistisch auf?' }] })
@@ -144,7 +144,7 @@ export async function loadCoachState(userId) {
     tips.push({ id: `proud-${dayKey(t)}`, text: todayMin >= 60 ? `Schon ${todayMin} Minuten heute. Stark!` : 'Super Abfrage heute!', actions: doneNeverQuizzed[0] ? [quizAction(doneNeverQuizzed[0], 'Noch kurz abfragen')] : [] })
   }
   if (doneNeverQuizzed[0]) {
-    tips.push({ id: `unquizzed-${doneNeverQuizzed[0].id}`, text: `«${doneNeverQuizzed[0].title}» hast du abgehakt, aber nie abgefragt. Sitzt es wirklich?`, actions: [quizAction(doneNeverQuizzed[0], 'Abfragen')] })
+    tips.push({ id: `unquizzed-${doneNeverQuizzed[0].id}`, topicId: doneNeverQuizzed[0].id, text: `«${doneNeverQuizzed[0].title}» hast du abgehakt, aber nie abgefragt. Sitzt es wirklich?`, actions: [quizAction(doneNeverQuizzed[0], 'Abfragen')] })
   }
 
   // ---- Kontext für die KI ----
@@ -227,7 +227,7 @@ export async function loadCoachState(userId) {
     tips,
     refs,
     baseContext: L.join('\n'),
-    stats: { todayMin, weekMin, streak },
+    stats: { todayMin, weekMin, streak, lastStudyDaysAgo, quizzesToday: quizzesToday.length },
     nextTopic,
     loadedAt: Date.now(),
   }

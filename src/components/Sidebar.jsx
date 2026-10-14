@@ -26,6 +26,7 @@ export default function Sidebar({ sections, active, onChange, collapsed, onToggl
               key={s.id}
               type="button"
               className={`sidebar-nav-item ${active === s.id ? 'active' : ''}`}
+              data-lumi-nav={s.id}
               onClick={() => selectSection(s.id)}
               title={!expanded ? s.label : undefined}
             >

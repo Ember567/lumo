@@ -4,7 +4,8 @@ import { APP_NAME } from '../config.js'
 import { recordProgress } from '../lib/progress.js'
 import { toISODate } from '../lib/dates.js'
 import { isLumiHidden, setLumiHidden, onLumiVisibility, clearChat } from '../lib/coach.js'
-import LumiFace from './coach/LumiFace.jsx'
+import Firefly from './lumi/Firefly.jsx'
+import { isLumiQuiet, setLumiQuiet } from '../lib/lumi.js'
 import { TEMPLATES, defaultStartDate, shiftDaysFor, templateStats } from '../templates/index.js'
 
 const EXPORT_TABLES = [
@@ -15,26 +16,34 @@ const EXPORT_TABLES = [
 
 function LumiCard({ userId }) {
   const [hidden, setHidden] = useState(isLumiHidden)
+  const [quiet, setQuiet] = useState(isLumiQuiet)
   const [cleared, setCleared] = useState(false)
-  useEffect(() => onLumiVisibility(() => setHidden(isLumiHidden())), [])
+  useEffect(() => onLumiVisibility(() => { setHidden(isLumiHidden()); setQuiet(isLumiQuiet()) }), [])
   return (
     <section className="card">
-      <div className="card-head"><h2>Lernbegleiter Lumi</h2></div>
+      <div className="card-head"><h2>Lumi, dein Glühwürmchen</h2></div>
       <div className="lumi-settings">
-        <LumiFace mood={hidden ? 'sleepy' : 'happy'} size={52} />
+        <div className="lumi-settings-ff" style={{ '--glow': hidden ? 0.15 : 0.8 }}>
+          <Firefly expression={hidden ? 'closed' : 'happy'} cap={hidden} size={60} />
+        </div>
         <div>
           <p className="field-hint">
-            Lumi kennt deinen Lernstand, gibt Tipps und beantwortet Fragen. An die KI gehen nur Titel deiner Ziele, Fächer,
-            Themen, Fristen und Aufgaben sowie deine Lernzeit, keine E-Mail-Adresse. Der Chatverlauf bleibt auf diesem Gerät.
+            Lumi fliegt über die Seite, feiert mit, wenn du Themen abhakst, liest beim Timer mit und leuchtet heller,
+            je mehr du heute lernst. Tippst du Lumi an, kannst du Fragen stellen. An die KI gehen nur Titel deiner Ziele,
+            Fächer, Themen, Fristen und Aufgaben sowie deine Lernzeit. Der Gesprächsverlauf bleibt auf diesem Gerät.
           </p>
           <div className="lumi-settings-actions">
             <label className="lumi-toggle">
               <input type="checkbox" checked={!hidden} onChange={e => setLumiHidden(!e.target.checked)} />
               Lumi anzeigen
             </label>
+            <label className="lumi-toggle">
+              <input type="checkbox" checked={quiet} disabled={hidden} onChange={e => setLumiQuiet(e.target.checked)} />
+              Ruhemodus (keine Erkundungsflüge, weniger Sprüche)
+            </label>
             <button type="button" className="btn btn-sm btn-ghost" disabled={cleared}
               onClick={() => { clearChat(userId); setCleared(true) }}>
-              {cleared ? 'Verlauf gelöscht' : 'Chatverlauf löschen'}
+              {cleared ? 'Verlauf gelöscht' : 'Gesprächsverlauf löschen'}
             </button>
           </div>
         </div>

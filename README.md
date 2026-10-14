@@ -20,7 +20,7 @@ Live: **https://lumo.berendak.ch**
 | **Organisation** | Aufgaben, Termine und ein Zeitstrahl mit Phasen, Fristen und Terminen. |
 | **Vorlagen** | Startklare Lernpläne beim Onboarding oder später dazuladen. Alle Daten werden auf ein frei wählbares Startdatum verschoben. Mitgeliefert: *Passerelle + EMS (Schweiz)* mit 110 Themen nach den SBFI-Richtlinien 2023, und ein kleiner Beispielplan. |
 | **Abfragen (KI)** | Eigener Bereich zum Ausfragen: Thema oder ganzes Fach wählen, die KI erstellt Multiple-Choice-Fragen. Frage für Frage mit sofortigem Feedback und Erklärung, danach Auswertung. Vorschläge (schwache, erledigte aber nie abgefragte, lange nicht geübte Themen), Stand pro Fach, Verlauf und ein Fehlerheft, dessen Fragen sich ohne KI erneut üben lassen. |
-| **Lernbegleiter Lumi** | Ein kleines animiertes Maskottchen unten rechts. Lumis Stimmung folgt deinem Lernstand (stolz nach einer guten Abfrage, besorgt bei knapper Frist, müde spät in der Nacht), und Lumi gibt von sich aus Tipps: nächstes Thema, schwache Themen, Rückstand im Phasenplan. Im Chat beantwortet Lumi Fragen zu deinem Plan, erklärt Stoff und schlägt Aktionen vor (Abfrage starten, Bereich öffnen, Aufgabe anlegen), die du per Klick ausführst. |
+| **Lumi, das Glühwürmchen** | Ein animiertes Glühwürmchen fliegt über die Seite und reagiert auf das, was du tust: Es fliegt zum abgehakten Thema und lässt Funken regnen, setzt sich mit einem Buch auf den laufenden Timer, macht bei richtigen Antworten einen Looping und zuckt bei falschen zusammen, setzt in den Abfragen eine Brille auf und schläft nachts mit Zipfelmütze. Seine Laterne leuchtet heller, je mehr du heute gelernt hast. Lumi zeigt Tipps in Comic-Sprechblasen, fliegt dabei zum passenden Thema und lässt sich antippen, um Fragen zu stellen. Vorgeschlagene Aktionen (Abfrage starten, Bereich öffnen, Aufgabe anlegen) führst du per Klick aus. |
 | **Datenschutz** | Jede Person sieht nur ihre eigenen Daten. Export aller Daten als JSON, Plan zurücksetzen, Konto inkl. aller Daten löschen. |
 
 ## Technik
@@ -40,9 +40,13 @@ Die App spricht direkt mit der Datenbank; geschützt wird auf Datenbankebene:
 - Vorlagen-Import (`import_template`) und Zurücksetzen (`reset_my_data`) laufen als
   Datenbankfunktionen in **einer Transaktion** mit den Rechten der aufrufenden Person.
 
-### Lernbegleiter Lumi (`src/lib/coach.js`, `supabase/functions/coach`)
+### Lumi, das Glühwürmchen (`src/components/lumi`, `src/lib/lumi.js`, `src/lib/coach.js`, `supabase/functions/coach`)
 
-- Stimmung und Tipps entstehen **ohne KI** aus Regeln (Lernzeit, Abfragen, Phase, Fristen) — kein Kontingent nötig.
+- Komponenten melden Ereignisse über einen kleinen Event-Bus (`lumiEmit('topic-done', { el })` usw.);
+  Lumi entscheidet selbst, wohin es fliegt und wie es reagiert. Die Flugbahn ist eine Feder-Physik im
+  `requestAnimationFrame`-Loop direkt am DOM, Leuchtspur und Funken laufen auf einem Canvas.
+- Reaktionen, Stimmung und Tipps entstehen **ohne KI** aus Regeln (Lernzeit, Abfragen, Phase, Fristen) — kein Kontingent nötig.
+- Ruhemodus und Ausblenden in den Einstellungen; bei «Bewegung reduzieren» fliegt Lumi ohne Spur und Loopings.
 - Für den Chat fasst die App den Lernstand als kurzen Text zusammen. Themen und Fächer tragen Kürzel (`T1`, `S2`),
   die KI antwortet mit diesen Kürzeln; erst die App übersetzt sie zurück. So sieht die KI keine Datenbank-IDs.
 - Antworten kommen als striktes JSON (`reply`, `mood`, `actions`), werden serverseitig geprüft, ungültige Aktionen verworfen.
@@ -158,7 +162,7 @@ npm run dev               # http://localhost:5173
 │       ├── StudyPlanTopics.jsx  Themen-Checkliste
 │       ├── StudyBurndown.jsx    Soll/Ist pro Phase
 │       ├── Progress.jsx         Fortschritt + Verlauf pro Ziel
-│       ├── coach/               Lumi: Maskottchen, Tipps, Chat
+│       ├── lumi/                Lumi: Glühwürmchen (SVG), Flug, Reaktionen, Sprechblasen
 │       ├── quiz/                Abfragen-Bereich: Start, Statistik, Fehlerheft, laufende Abfrage
 │       ├── planner/             Editoren: Ziele, Fächer & Themen, Phasen, Wochen, Fristen
 │       ├── Settings.jsx         Profil, Vorlagen, Export, Reset, Konto löschen

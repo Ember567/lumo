@@ -1,3 +1,4 @@
+import { lumiEmit } from './lumi.js'
 import { supabase } from '../supabaseClient.js'
 import { STORAGE_PREFIX } from '../config.js'
 
@@ -144,7 +145,13 @@ export async function recordProgress(userId) {
     const rows = progress
       .filter(p => isMilestone(p.pct, lastByGoal[p.goal.id]))
       .map(p => ({ user_id: userId, goal_id: p.goal.id, pct: p.pct }))
-    if (rows.length) await supabase.from('progress_snapshots').insert(rows)
+    if (rows.length) {
+      await supabase.from('progress_snapshots').insert(rows)
+      // Nur echte Fortschritte feiern (nicht den allerersten Eintrag eines Ziels unter 10 %).
+      const best = progress.filter(p => rows.some(r => r.goal_id === p.goal.id) && p.pct >= 10 && p.pct > (lastByGoal[p.goal.id] ?? 0))
+        .sort((a, b) => b.pct - a.pct)[0]
+      if (best) lumiEmit('milestone', { goalName: best.goal.name, pct: best.pct })
+    }
   } finally {
     notifyPlanChanged()
   }

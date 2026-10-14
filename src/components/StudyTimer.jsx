@@ -4,6 +4,7 @@ import { getStudyTotals, onPlanChanged, recordProgress } from '../lib/progress.j
 import { goalColor, sortSubjects } from '../lib/plan.js'
 import { currentPhaseOf, daysUntil, formatDuration, startOfWeek, today } from '../lib/dates.js'
 import { STORAGE_PREFIX } from '../config.js'
+import { lumiEmit } from '../lib/lumi.js'
 
 // Ein laufender Timer überlebt Neuladen und Sektionswechsel: Start-Zeitpunkt
 // und Auswahl liegen in localStorage, die Anzeige rechnet daraus.
@@ -43,6 +44,7 @@ export default function StudyTimer({ userId }) {
   const [pendingStop, setPendingStop] = useState(null)
   const [notice, setNotice] = useState('')
   const intervalRef = useRef(null)
+  const cardRef = useRef(null)
 
   const status = !timer ? 'idle' : timer.startedAt ? 'running' : 'paused'
   const elapsed = timer ? timer.accumulated + (timer.startedAt ? Math.floor((now - timer.startedAt) / 1000) : 0) : 0
@@ -105,16 +107,19 @@ export default function StudyTimer({ userId }) {
     setNotice('')
     setNow(Date.now())
     setTimer(cur => ({ startedAt: Date.now(), accumulated: cur?.accumulated || 0 }))
+    lumiEmit('timer-start', { el: cardRef.current })
   }
 
   function pause() {
     setTimer(cur => ({ startedAt: null, accumulated: elapsed }))
+    lumiEmit('timer-pause')
   }
 
   async function stop() {
     const seconds = elapsed
     setTimer(null)
     if (seconds < MIN_SESSION_SECONDS) {
+      lumiEmit('timer-cancel')
       setNotice('Sessions unter einer Minute werden nicht gespeichert.')
       return
     }
@@ -130,7 +135,8 @@ export default function StudyTimer({ userId }) {
     const { error } = await supabase.from('study_sessions').insert({
       user_id: userId, duration_seconds: seconds, goal_id: gid || null, topic_id: tid || null,
     })
-    if (error) { setNotice('Session konnte nicht gespeichert werden.'); return }
+    if (error) { setNotice('Session konnte nicht gespeichert werden.'); lumiEmit('timer-cancel'); return }
+    lumiEmit('timer-saved', { minutes: Math.round(seconds / 60) })
     if (markDone && tid) {
       const doneAt = new Date().toISOString()
       await Promise.all([
@@ -156,7 +162,7 @@ export default function StudyTimer({ userId }) {
   ].map(b => ({ ...b, seconds: stats.byGoal[b.key] || 0 })).filter(b => b.seconds > 0)
 
   return (
-    <section className="card card-study">
+    <section className="card card-study" ref={cardRef} data-lumi-perch="timer">
       <div className="card-head">
         <h2>Lern-Timer</h2>
         <span className="eyebrow">{status === 'idle' ? 'Bereit' : status === 'running' ? 'Läuft' : 'Pausiert'}</span>
