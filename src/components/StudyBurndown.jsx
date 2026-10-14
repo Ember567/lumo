@@ -5,12 +5,12 @@ import { currentPhaseOf, fmtShort, parseDate, today as todayDate } from '../lib/
 import { ResponsiveContainer, ComposedChart, Area, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ReferenceLine } from 'recharts'
 
 // Hex-Werte spiegeln die CSS-Variablen in style.css — SVG-Attribute lesen keine var().
-const COLOR_AMBER = '#9c6b1f'
-const COLOR_SAGE = '#4f7a63'
-const COLOR_SLATE = '#7a7268'
-const COLOR_PAPER = '#2c2825'
-const COLOR_GROUND = '#fdfdfc'
-const CHART_FONT = 'Inter, sans-serif'
+const COLOR_AMBER = '#B98A00'
+const COLOR_SAGE = '#2E9B4E'
+const COLOR_SLATE = '#6E6982'
+const COLOR_PAPER = '#1E1B2E'
+const COLOR_GROUND = '#FFFFFF'
+const CHART_FONT = '"Plus Jakarta Sans", sans-serif'
 
 
 function ChartTooltip({ active, payload, label }) {

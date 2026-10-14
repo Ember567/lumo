@@ -151,7 +151,7 @@ function Dashboard({ session }) {
         onCloseMobile={() => setMobileMenuOpen(false)}
       />
 
-      <div className="main-content">
+      <div className="main-content" data-section={activeSection}>
         <header className="content-header">
           <button type="button" className="mobile-menu-btn" onClick={() => setMobileMenuOpen(true)} aria-label="Menü öffnen">
             <Menu size={20} strokeWidth={2} />

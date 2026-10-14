@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
 import { supabase } from '../supabaseClient.js'
 import { getGoalProgress, onPlanChanged } from '../lib/progress.js'
-import { goalColor } from '../lib/plan.js'
+import { goalColor, goalLine } from '../lib/plan.js'
 import { daysUntil, fmtShort, toISODate } from '../lib/dates.js'
 
 // Hex-Werte spiegeln die CSS-Variablen in style.css — SVG-Attribute lesen keine var().
-const COLOR_SLATE = '#7a7268'
-const COLOR_PAPER = '#2c2825'
-const COLOR_GROUND = '#fdfdfc'
-const CHART_FONT = 'Inter, sans-serif'
+const COLOR_SLATE = '#6E6982'
+const COLOR_PAPER = '#1E1B2E'
+const COLOR_GROUND = '#FFFFFF'
+const CHART_FONT = '"Plus Jakarta Sans", sans-serif'
 
 function ChartTooltip({ active, payload, label }) {
   if (!active || !payload || !payload.length) return null
@@ -112,8 +112,8 @@ export default function ProgressCard({ userId, onNavigate }) {
                 {progress.map(({ goal }) => (
                   <Line
                     key={goal.id} type="monotone" dataKey={goal.id} name={goal.name}
-                    stroke={goalColor(goal)} strokeWidth={2} connectNulls
-                    dot={{ r: 3, stroke: COLOR_GROUND, strokeWidth: 2, fill: goalColor(goal) }} activeDot={{ r: 5 }}
+                    stroke={goalLine(goal)} strokeWidth={2.5} connectNulls
+                    dot={{ r: 4, stroke: '#1E1B2E', strokeWidth: 1.5, fill: goalColor(goal) }} activeDot={{ r: 5 }}
                   />
                 ))}
               </LineChart>

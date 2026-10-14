@@ -14,18 +14,23 @@ export function sortSubjects(list) {
 }
 
 // Ziel-Farben. Hex-Werte, weil Recharts-SVG-Attribute keine CSS-Variablen lesen.
-// Die Töne stammen aus der Palette in style.css.
+// hex = Füllfarbe (Balken, Punkte), line = dunklere Variante für Linien in Diagrammen.
+// Die Schlüssel bleiben stabil, weil sie in der Datenbank stehen.
 export const GOAL_COLORS = {
-  ink: { label: 'Graphit', hex: '#2c2825' },
-  amber: { label: 'Bernstein', hex: '#9c6b1f' },
-  sage: { label: 'Salbei', hex: '#4f7a63' },
-  blue: { label: 'Blau', hex: '#1f6c9f' },
-  rose: { label: 'Ziegel', hex: '#a8493c' },
-  slate: { label: 'Stein', hex: '#7a7268' },
+  ink: { label: 'Tinte', hex: '#1E1B2E', line: '#1E1B2E' },
+  amber: { label: 'Sonne', hex: '#F7CB46', line: '#B98A00' },
+  sage: { label: 'Minze', hex: '#99E885', line: '#2E9B4E' },
+  blue: { label: 'Himmel', hex: '#7FDCEF', line: '#1C8DAA' },
+  rose: { label: 'Kaugummi', hex: '#FE90E8', line: '#C23FA8' },
+  slate: { label: 'Butter', hex: '#FFDC8B', line: '#B07A12' },
 }
 
 export function goalColor(goal) {
   return (GOAL_COLORS[goal?.color] || GOAL_COLORS.ink).hex
+}
+
+export function goalLine(goal) {
+  return (GOAL_COLORS[goal?.color] || GOAL_COLORS.ink).line
 }
 
 export const GOAL_KINDS = {

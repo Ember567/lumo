@@ -25,9 +25,19 @@ Live: **https://lumo.berendak.ch**
 
 ## Technik
 
-- **Frontend:** React 18 + Vite, Recharts für Diagramme, lucide-react für Icons
+- **Frontend:** React 18 + Vite, Recharts für Diagramme, lucide-react für Icons, Fontsource für Schriften
 - **Backend:** Supabase (Postgres, Auth, auto-generierte REST-API) — kein eigener Server
 - **Hosting:** Vercel, Domain über Hostpoint
+
+### Gestaltung
+
+Neo-Brutalismus mit Claymorphism: Karten und Bereiche haben eine 2px-Tinten-Kontur und einen
+harten, versetzten Schatten; Bedienelemente (Knöpfe, Kacheln, Fortschrittsbalken) sind weich und
+"aufgeblasen" mit Licht oben und Schatten unten und lassen sich sichtbar drücken. Jeder Bereich hat
+eine eigene Farbe (Übersicht Sonne, Lernen Minze, Abfragen Kaugummi, Planer Himmel, Organisation Butter),
+die im Seitentitel, in der Navigation und in den Bedienelementen wiederkehrt. Schriften: Bricolage
+Grotesque (Titel, Zahlen) und Plus Jakarta Sans (Text), selbst gehostet über Fontsource.
+Alle Farben stehen als Variablen am Anfang von `src/style.css`, das Thema am Ende der Datei.
 
 ### Sicherheitsmodell
 
