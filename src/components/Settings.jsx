@@ -5,6 +5,7 @@ import { recordProgress } from '../lib/progress.js'
 import { toISODate } from '../lib/dates.js'
 import { isLumiHidden, setLumiHidden, onLumiVisibility, clearChat } from '../lib/coach.js'
 import Firefly from './lumi/Firefly.jsx'
+import QuotaCard from './QuotaCard.jsx'
 import { isLumiQuiet, setLumiQuiet } from '../lib/lumi.js'
 import { TEMPLATES, defaultStartDate, shiftDaysFor, templateStats } from '../templates/index.js'
 
@@ -57,6 +58,7 @@ export default function SettingsView({ userId, email, settings, onSettingsChange
     <div className="plan-section settings-page">
       <ProfileCard userId={userId} email={email} settings={settings} onSettingsChange={onSettingsChange} />
       <LumiCard userId={userId} />
+      <QuotaCard userId={userId} />
       <TemplateCard userId={userId} onNavigate={onNavigate} />
       <DataCard userId={userId} onSettingsChange={onSettingsChange} />
     </div>

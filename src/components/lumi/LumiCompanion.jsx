@@ -9,6 +9,7 @@ import {
   isLumiHidden, setLumiHidden, onLumiVisibility, loadChat, saveChat, seenTips, markTipSeen,
 } from '../../lib/coach.js'
 import { onLumiEvent, quip, isLumiQuiet, timerRunning } from '../../lib/lumi.js'
+import { requestScan } from '../../lib/scan.js'
 import Firefly from './Firefly.jsx'
 
 // ------------------------------------------------------------
@@ -288,6 +289,22 @@ export default function LumiCompanion({ userId, section, onNavigate, onStartQuiz
             later('milestoneSay', () => say(quip('milestone', { goal: ev.goalName, pct: ev.pct }), 4500), 30)
           }, 900)
         }, wait)
+        break
+      }
+      case 'scan-saved': {
+        const el = ev.firstTopic ? topicEl(ev.firstTopic.id) : null
+        if (el) flyTo(el, { ms: 9000, anchor: 'right' })
+        later('scanReact', () => {
+          const r = visible(el)
+          if (r) burst(r.left + 20, r.top + r.height / 2, 60, 1.3)
+          script('loop', 1000); flash('happy', 2200)
+          setBubble({
+            kind: 'tip', at: Date.now(),
+            text: `${ev.count} ${ev.count === 1 ? 'neues Thema' : 'neue Themen'} in ${ev.subjectName || 'deinem Fach'}! Mit Zusammenfassung und Lernzielen. Soll ich dich gleich abfragen?`,
+            actions: ev.firstTopic ? [{ type: 'start_quiz', label: `«${ev.firstTopic.title}» abfragen`, topic: ev.firstTopic }] : [],
+          })
+          later('bubble', () => setBubble(cur => (cur?.kind === 'tip' ? null : cur)), 25000)
+        }, 900)
         break
       }
       case 'task-done': {
@@ -739,6 +756,7 @@ export default function LumiCompanion({ userId, section, onNavigate, onStartQuiz
                     <p>Hallo{name}! Was möchtest du wissen?</p>
                     <div className="lumi-chips">
                       {QUICK_PROMPTS.slice(0, 3).map(q => <button key={q} type="button" onClick={() => send(q)}>{q}</button>)}
+                      <button type="button" className="lumi-chip-scan" onClick={() => { setBubble(null); requestScan() }}>Lernstoff scannen</button>
                     </div>
                   </>
                 )}

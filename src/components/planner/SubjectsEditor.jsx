@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { ArrowDown, ArrowUp, ChevronDown, ChevronRight, X } from 'lucide-react'
+import { ArrowDown, ArrowUp, Camera, ChevronDown, ChevronRight, X } from 'lucide-react'
+import { requestScan } from '../../lib/scan.js'
 import { useTable } from '../../lib/useTable.js'
 import { recordProgress } from '../../lib/progress.js'
 import { PRIORITIES, PRIORITY_ORDER, priorityClass } from '../../lib/plan.js'
@@ -59,7 +60,12 @@ export default function SubjectsEditor({ userId, onTabChange }) {
     <section className="card">
       <div className="card-head">
         <h2>Fächer &amp; Themen</h2>
-        <span className="eyebrow">{subjects.rows.length} Fächer · {topics.rows.length} Themen</span>
+        <div className="card-head-tools">
+          <span className="eyebrow">{subjects.rows.length} Fächer · {topics.rows.length} Themen</span>
+          <button type="button" className="btn btn-sm btn-primary scan-open-btn" onClick={() => requestScan()}>
+            <Camera size={15} strokeWidth={2.2} /> Aus Foto oder PDF
+          </button>
+        </div>
       </div>
       <ErrorNote message={error} />
 

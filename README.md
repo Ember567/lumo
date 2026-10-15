@@ -20,6 +20,9 @@ Live: **https://lumo.berendak.ch**
 | **Organisation** | Aufgaben, Termine und ein Zeitstrahl mit Phasen, Fristen und Terminen. |
 | **Vorlagen** | Startklare Lernpläne beim Onboarding oder später dazuladen. Alle Daten werden auf ein frei wählbares Startdatum verschoben. Mitgeliefert: *Passerelle + EMS (Schweiz)* mit 110 Themen nach den SBFI-Richtlinien 2023, und ein kleiner Beispielplan. |
 | **Abfragen (KI)** | Eigener Bereich zum Ausfragen: Thema oder ganzes Fach wählen, die KI erstellt Multiple-Choice-Fragen. Frage für Frage mit sofortigem Feedback und Erklärung, danach Auswertung. Vorschläge (schwache, erledigte aber nie abgefragte, lange nicht geübte Themen), Stand pro Fach, Verlauf und ein Fehlerheft, dessen Fragen sich ohne KI erneut üben lassen. |
+| **Foto rein, Lernplan raus** | Foto vom Arbeitsblatt, Buchseite, PDF oder eingefügter Text: Die KI macht daraus ein Fach mit Themen, je einer Zusammenfassung und Lernzielen. Vor dem Anlegen kann man alles prüfen und anpassen. Die Abfragen stützen sich danach auf diese Zusammenfassungen. Bilder werden im Browser verkleinert und nicht gespeichert. |
+| **Lichtwiese** | Eine Nachtwiese mit einem Glühwürmchen pro Lerntag der letzten 12 Wochen, je heller, desto mehr gelernt. Im Vollbild steigt auf Knopfdruck ein Schwarm auf und schreibt den Fortschritt des wichtigsten Ziels in den Himmel. |
+| **KI-Kontingent** | In den Einstellungen: eigene Tageslimits (Abfragen, Lumi, Scans), die Limits von Groq pro Modell (Anfragen pro Tag, Tokens pro Minute) und der Verlauf der letzten 7 Tage. |
 | **Lumi, das Glühwürmchen** | Ein animiertes Glühwürmchen fliegt über die Seite und reagiert auf das, was du tust: Es fliegt zum abgehakten Thema und lässt Funken regnen, setzt sich mit einem Buch auf den laufenden Timer, macht bei richtigen Antworten einen Looping und zuckt bei falschen zusammen, setzt in den Abfragen eine Brille auf und schläft nachts mit Zipfelmütze. Seine Laterne leuchtet heller, je mehr du heute gelernt hast. Lumi zeigt Tipps in Comic-Sprechblasen, fliegt dabei zum passenden Thema und lässt sich antippen, um Fragen zu stellen. Vorgeschlagene Aktionen (Abfrage starten, Bereich öffnen, Aufgabe anlegen) führst du per Klick aus. |
 | **Datenschutz** | Jede Person sieht nur ihre eigenen Daten. Export aller Daten als JSON, Plan zurücksetzen, Konto inkl. aller Daten löschen. |
 
@@ -108,11 +111,14 @@ Reihenfolge: **1. Supabase → 2. Lokal testen → 3. Vercel → 4. Domain bei H
 3. **Edge Functions → Deploy a new function → Via Editor**, Name `quiz`, Inhalt von
    [`supabase/functions/quiz/index.ts`](supabase/functions/quiz/index.ts) einfügen, deployen.
    Alternativ mit der Supabase CLI: `supabase functions deploy quiz`.
-4. Gleich für den Lernbegleiter: [`supabase/migrations/003_coach.sql`](supabase/migrations/003_coach.sql) ausführen
+4. Für Foto-Scan und Kontingent-Anzeige: [`supabase/migrations/004_scan_kontingent.sql`](supabase/migrations/004_scan_kontingent.sql)
+   ausführen und eine Function `scan` mit [`supabase/functions/scan/index.ts`](supabase/functions/scan/index.ts) anlegen.
+5. Gleich für den Lernbegleiter: [`supabase/migrations/003_coach.sql`](supabase/migrations/003_coach.sql) ausführen
    und eine zweite Function `coach` mit [`supabase/functions/coach/index.ts`](supabase/functions/coach/index.ts) anlegen.
-5. **Edge Functions → Secrets:** `AI_API_KEY` = dein Groq-Key (gilt für beide Functions).
+6. **Edge Functions → Secrets:** `AI_API_KEY` = dein Groq-Key (gilt für alle Functions).
    Optional: `AI_MODEL`, `AI_BASE_URL` (anderer Anbieter), `AI_DAILY_LIMIT_USER` (Standard 20),
-   `AI_DAILY_LIMIT_GLOBAL` (Standard 800), `AI_CHAT_MODEL`, `AI_CHAT_DAILY_LIMIT_USER` (30), `AI_CHAT_DAILY_LIMIT_GLOBAL` (200).
+   `AI_DAILY_LIMIT_GLOBAL` (Standard 800), `AI_CHAT_MODEL`, `AI_CHAT_DAILY_LIMIT_USER` (30), `AI_CHAT_DAILY_LIMIT_GLOBAL` (200),
+   `AI_VISION_MODEL` (Fotos, Standard `qwen/qwen3.8-27b`), `AI_SCAN_DAILY_LIMIT_USER` (10), `AI_SCAN_DAILY_LIMIT_GLOBAL` (100).
 
 ### 2. Lokal starten
 
@@ -152,8 +158,8 @@ npm run dev               # http://localhost:5173
 ```
 ├── supabase/
 │   ├── schema.sql               Komplettes Datenbankschema (Tabellen, RLS, Funktionen)
-│   ├── migrations/              002 KI-Quiz, 003 Lernbegleiter (für bestehende Datenbanken)
-│   └── functions/               quiz: Fragen per KI · coach: Lernbegleiter Lumi
+│   ├── migrations/              002 KI-Quiz, 003 Lernbegleiter, 004 Scan + Kontingent
+│   └── functions/               quiz: Fragen · coach: Lumi · scan: Lernmaterial → Lernplan
 ├── src/
 │   ├── App.jsx                  Login-Weiche, Onboarding, Navigation
 │   ├── config.js                App-Name und Claim
@@ -172,6 +178,9 @@ npm run dev               # http://localhost:5173
 │       ├── StudyPlanTopics.jsx  Themen-Checkliste
 │       ├── StudyBurndown.jsx    Soll/Ist pro Phase
 │       ├── Progress.jsx         Fortschritt + Verlauf pro Ziel
+│       ├── scan/                Foto rein, Lernplan raus
+│       ├── meadow/              Lichtwiese (Canvas, Finale)
+│       ├── QuotaCard.jsx        KI-Kontingent
 │       ├── lumi/                Lumi: Glühwürmchen (SVG), Flug, Reaktionen, Sprechblasen
 │       ├── quiz/                Abfragen-Bereich: Start, Statistik, Fehlerheft, laufende Abfrage
 │       ├── planner/             Editoren: Ziele, Fächer & Themen, Phasen, Wochen, Fristen

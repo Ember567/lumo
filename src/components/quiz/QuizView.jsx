@@ -206,9 +206,10 @@ export default function QuizView({ userId, request, onRequestHandled, onNavigate
       <section className="card quiz-start">
         <div className="card-head">
           <h2>Neue Abfrage</h2>
-          <span className={`eyebrow ${view.left === 0 ? 'quiz-quota-empty' : ''}`}>
-            Heute noch {view.left} von {QUIZ_DAILY_LIMIT} KI-Abfragen
-          </span>
+          <button type="button" className={`quiz-quota ${view.left === 0 ? 'quiz-quota-empty' : ''}`} onClick={() => onNavigate('settings')} title="KI-Kontingent ansehen">
+            <span className="quota-meter small" aria-hidden="true"><span style={{ width: `${(view.left / QUIZ_DAILY_LIMIT) * 100}%` }} /></span>
+            Heute noch {view.left} von {QUIZ_DAILY_LIMIT}
+          </button>
         </div>
 
         <div className="quiz-modes" role="tablist" aria-label="Art der Abfrage">

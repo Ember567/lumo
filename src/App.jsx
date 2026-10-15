@@ -11,6 +11,7 @@ import StatusBar from './components/StatusBar.jsx'
 import NextUp from './components/NextUp.jsx'
 import OverviewSummary from './components/OverviewSummary.jsx'
 import WeeklyReview from './components/WeeklyReview.jsx'
+import MeadowCard from './components/meadow/Meadow.jsx'
 import WeeklyFocusCard from './components/WeeklyFocusCard.jsx'
 import StudyTimer from './components/StudyTimer.jsx'
 import StudyPlanTopics from './components/StudyPlanTopics.jsx'
@@ -24,6 +25,8 @@ import Planner from './components/planner/Planner.jsx'
 import SettingsView from './components/Settings.jsx'
 import QuizView from './components/quiz/QuizView.jsx'
 import LumiCompanion from './components/lumi/LumiCompanion.jsx'
+import ScanDialog from './components/scan/ScanDialog.jsx'
+import { onScanRequest } from './lib/scan.js'
 import { lumiEmit } from './lib/lumi.js'
 
 const SIDEBAR_BREAKPOINT = 820
@@ -93,6 +96,9 @@ function Dashboard({ session }) {
   const [collapsed, setCollapsed] = useState(getInitialSidebarCollapsed)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [quizRequest, setQuizRequest] = useState(null)
+  const [scan, setScan] = useState(null) // { subjectId } während der Scan-Dialog offen ist
+
+  useEffect(() => onScanRequest(detail => setScan({ subjectId: detail.subjectId || '' })), [])
 
   useEffect(() => { loadSettings() }, [userId])
 
@@ -166,6 +172,7 @@ function Dashboard({ session }) {
             <NextUp userId={userId} onNavigate={navigate} onStartQuiz={startQuiz} />
             <OverviewSummary userId={userId} onNavigate={navigate} />
             <WeeklyReview userId={userId} />
+            <MeadowCard userId={userId} />
           </div>
         )}
 
@@ -224,6 +231,7 @@ function Dashboard({ session }) {
       </div>
 
       <LumiCompanion userId={userId} section={activeSection} onNavigate={navigate} onStartQuiz={startQuiz} />
+      {scan && <ScanDialog userId={userId} initialSubjectId={scan.subjectId} onClose={() => setScan(null)} onNavigate={navigate} />}
     </div>
   )
 }

@@ -116,7 +116,31 @@ class AiError extends Error {
   constructor(message: string, readonly retryable: boolean) { super(message) }
 }
 
-async function askModel(apiKey: string, messages: { role: string; content: string }[]): Promise<string> {
+// Groq schickt bei jeder Antwort den Stand seiner Limits mit. Den merken wir
+// uns pro Modell, damit Lumo das Kontingent anzeigen kann.
+// deno-lint-ignore no-explicit-any
+async function noteProvider(admin: any, model: string, res: Response) {
+  const h = (k: string) => res.headers.get(k)
+  if (!admin || (h('x-ratelimit-limit-requests') === null && h('x-ratelimit-limit-tokens') === null)) return
+  const num = (k: string) => (h(k) === null || Number.isNaN(Number(h(k))) ? null : Math.round(Number(h(k))))
+  try {
+    const { error } = await admin.from('ai_provider_status').upsert({
+      model,
+      limit_requests: num('x-ratelimit-limit-requests'),
+      remaining_requests: num('x-ratelimit-remaining-requests'),
+      reset_requests: h('x-ratelimit-reset-requests'),
+      limit_tokens: num('x-ratelimit-limit-tokens'),
+      remaining_tokens: num('x-ratelimit-remaining-tokens'),
+      reset_tokens: h('x-ratelimit-reset-tokens'),
+      last_status: res.status,
+      updated_at: new Date().toISOString(),
+    })
+    if (error) console.error('Status konnte nicht gespeichert werden', error.message)
+  } catch (e) { console.error('Status konnte nicht gespeichert werden', e) }
+}
+
+// deno-lint-ignore no-explicit-any
+async function askModel(apiKey: string, messages: { role: string; content: string }[], admin?: any): Promise<{ content: string; tokens: number }> {
   const body: Record<string, unknown> = {
     model: AI_MODEL,
     messages,
@@ -131,6 +155,7 @@ async function askModel(apiKey: string, messages: { role: string; content: strin
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
     body: JSON.stringify(body),
   })
+  await noteProvider(admin, AI_MODEL, res)
   if (!res.ok) {
     const text = await res.text()
     console.error('KI-Anbieter antwortete mit', res.status, text.slice(0, 500))
@@ -141,7 +166,7 @@ async function askModel(apiKey: string, messages: { role: string; content: strin
   const data = await res.json()
   const content = data?.choices?.[0]?.message?.content
   if (typeof content !== 'string' || !content.trim()) throw new AiError('empty', true)
-  return content
+  return { content, tokens: Number(data?.usage?.total_tokens) || 0 }
 }
 
 // Falls das Modell doch LaTeX schreibt: lesbar machen (gleiche Logik wie "quiz").
@@ -266,7 +291,9 @@ Deno.serve(async req => {
 
   for (let attempt = 1; attempt <= 2; attempt++) {
     try {
-      const result = parseReply(await askModel(apiKey, messages))
+      const answer = await askModel(apiKey, messages, admin)
+      await admin.rpc('record_ai_tokens', { p_user: user.id, p_kind: 'coach', p_tokens: answer.tokens })
+      const result = parseReply(answer.content)
       return json(200, { ...result, remaining })
     } catch (err) {
       const e = err as AiError

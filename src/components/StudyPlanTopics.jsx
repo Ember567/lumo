@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { supabase } from '../supabaseClient.js'
 import { onPlanChanged, onScrollToTopics, recordProgress } from '../lib/progress.js'
 import { priorityClass, sortSubjects } from '../lib/plan.js'
-import { Sparkles } from 'lucide-react'
+import { Sparkles, Camera, FileText } from 'lucide-react'
+import { requestScan } from '../lib/scan.js'
 import { lastScoresByTopic, scoreClass } from '../lib/quiz.js'
 import { lumiEmit } from '../lib/lumi.js'
 
@@ -42,6 +43,8 @@ export default function StudyPlanTopics({ userId, onNavigate, onStartQuiz }) {
   const [highlightTopicIds, setHighlightTopicIds] = useState([])
   const [scores, setScores] = useState({})
   const topicRefs = useRef({})
+  const pendingHighlight = useRef(null)
+  const [notesOpen, setNotesOpen] = useState(() => new Set())
 
   // Eigene Änderungen werden optimistisch gesetzt; neu geladen wird nur,
   // wenn eine andere Komponente (z.B. der Timer) den Plan verändert hat.
@@ -57,15 +60,22 @@ export default function StudyPlanTopics({ userId, onNavigate, onStartQuiz }) {
 
   // WeeklyFocusCard schickt beim Klick auf eine Fokus-Zeile die
   // zugehörigen Themen-IDs — Fach aufklappen, kurz hervorheben, hinscrollen.
+  // Neu angelegte Themen (z.B. nach einem Scan) sind evtl. noch nicht geladen:
+  // dann merken und anwenden, sobald sie da sind.
+  function highlight(ids) {
+    const firstTopic = topics.find(t => t.id === ids[0])
+    if (!firstTopic) { pendingHighlight.current = ids; return }
+    pendingHighlight.current = null
+    setExpandedSubjectId(firstTopic.subject_id)
+    setHighlightTopicIds(ids)
+    window.setTimeout(() => setHighlightTopicIds([]), 3500)
+  }
+
   useEffect(() => {
+    if (pendingHighlight.current) highlight(pendingHighlight.current)
     return onScrollToTopics(e => {
       const ids = e.detail?.topicIds?.filter(Boolean) || []
-      if (ids.length === 0) return
-      const firstTopic = topics.find(t => t.id === ids[0])
-      if (!firstTopic) return
-      setExpandedSubjectId(firstTopic.subject_id)
-      setHighlightTopicIds(ids)
-      window.setTimeout(() => setHighlightTopicIds([]), 3000)
+      if (ids.length) highlight(ids)
     })
   }, [topics])
 
@@ -182,7 +192,12 @@ export default function StudyPlanTopics({ userId, onNavigate, onStartQuiz }) {
     <section className="card card-plan-topics">
       <div className="card-head">
         <h2>Themen</h2>
-        <span className="eyebrow">{overall.done}/{overall.total} erledigt</span>
+        <div className="card-head-tools">
+          <span className="eyebrow">{overall.done}/{overall.total} erledigt</span>
+          <button type="button" className="btn btn-sm btn-ghost scan-open-btn" onClick={() => requestScan()}>
+            <Camera size={15} strokeWidth={2.2} /> Aus Foto
+          </button>
+        </div>
       </div>
 
       <div className="subject-accordion">
@@ -257,6 +272,15 @@ export default function StudyPlanTopics({ userId, onNavigate, onStartQuiz }) {
                           ) : (
                             <span className="topic-title">{t.title}</span>
                           )}
+                          {t.notes && (
+                            <button
+                              type="button" className={`notes-btn ${notesOpen.has(t.id) ? 'open' : ''}`}
+                              onClick={() => setNotesOpen(cur => { const n = new Set(cur); n.has(t.id) ? n.delete(t.id) : n.add(t.id); return n })}
+                              aria-expanded={notesOpen.has(t.id)} aria-label={`Zusammenfassung zu ${t.title}`} title="Zusammenfassung"
+                            >
+                              <FileText size={13} strokeWidth={2} />
+                            </button>
+                          )}
                           <button
                             type="button"
                             className={`quiz-topic-btn ${scores[t.id] ? scoreClass(scores[t.id].pct) : ''}`}
@@ -268,6 +292,8 @@ export default function StudyPlanTopics({ userId, onNavigate, onStartQuiz }) {
                             {scores[t.id] && <span>{scores[t.id].correct}/{scores[t.id].total}</span>}
                           </button>
                         </div>
+
+                        {t.notes && notesOpen.has(t.id) && <p className="topic-notes">{t.notes}</p>}
 
                         {subtasks.length > 0 && (
                           <div className="topic-progress-track">
