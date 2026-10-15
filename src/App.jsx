@@ -15,6 +15,9 @@ import MeadowCard from './components/meadow/Meadow.jsx'
 import WeeklyFocusCard from './components/WeeklyFocusCard.jsx'
 import StudyTimer from './components/StudyTimer.jsx'
 import StudyPlanTopics from './components/StudyPlanTopics.jsx'
+import SummariesCard from './components/summaries/SummariesCard.jsx'
+import SummaryReader from './components/summaries/SummaryReader.jsx'
+import { onOpenSummary } from './lib/summaries.js'
 import StudyBurndown from './components/StudyBurndown.jsx'
 import ProgressCard from './components/Progress.jsx'
 import Tasks from './components/Tasks.jsx'
@@ -96,9 +99,11 @@ function Dashboard({ session }) {
   const [collapsed, setCollapsed] = useState(getInitialSidebarCollapsed)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [quizRequest, setQuizRequest] = useState(null)
-  const [scan, setScan] = useState(null) // { subjectId } während der Scan-Dialog offen ist
+  const [scan, setScan] = useState(null) // { subjectId, topicId, mode } während der Scan-Dialog offen ist
+  const [readerId, setReaderId] = useState(null) // offene Zusammenfassung
 
-  useEffect(() => onScanRequest(detail => setScan({ subjectId: detail.subjectId || '' })), [])
+  useEffect(() => onScanRequest(detail => setScan({ subjectId: detail.subjectId || '', topicId: detail.topicId || '', mode: detail.mode || 'plan' })), [])
+  useEffect(() => onOpenSummary(id => { if (id) setReaderId(id) }), [])
 
   useEffect(() => { loadSettings() }, [userId])
 
@@ -184,6 +189,7 @@ function Dashboard({ session }) {
               <StudyPlanTopics userId={userId} onNavigate={navigate} onStartQuiz={startQuiz} />
               <StudyBurndown userId={userId} onNavigate={navigate} />
             </div>
+            <SummariesCard userId={userId} />
             <ProgressCard userId={userId} onNavigate={navigate} />
           </div>
         )}
@@ -231,7 +237,13 @@ function Dashboard({ session }) {
       </div>
 
       <LumiCompanion userId={userId} section={activeSection} onNavigate={navigate} onStartQuiz={startQuiz} />
-      {scan && <ScanDialog userId={userId} initialSubjectId={scan.subjectId} onClose={() => setScan(null)} onNavigate={navigate} />}
+      {scan && (
+        <ScanDialog
+          userId={userId} initialSubjectId={scan.subjectId} initialTopicId={scan.topicId} initialMode={scan.mode}
+          onClose={() => setScan(null)} onNavigate={navigate}
+        />
+      )}
+      {readerId && <SummaryReader key={readerId} id={readerId} onClose={() => setReaderId(null)} onStartQuiz={startQuiz} />}
     </div>
   )
 }

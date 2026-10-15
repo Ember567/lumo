@@ -2,7 +2,8 @@ import { supabase } from '../supabaseClient.js'
 import { STORAGE_PREFIX } from '../config.js'
 
 // ------------------------------------------------------------
-// Lernmaterial scannen: Foto, Bild, PDF oder Text → Fach mit Themen.
+// Lernmaterial scannen: Foto, Bild, PDF oder Text → Fach mit Themen
+// (mode "plan") oder eine Zusammenfassung (mode "summary").
 // Bilder werden im Browser verkleinert und nie gespeichert; in die
 // Datenbank kommt nur der Text (Themen, Zusammenfassungen, Lernziele).
 // ------------------------------------------------------------
@@ -46,27 +47,40 @@ export async function compressImage(file, max = 1600, quality = 0.82) {
   return canvas.toDataURL('image/jpeg', quality)
 }
 
-// PDF: Text auslesen. Hat das PDF keinen Text (eingescannt), werden die
-// ersten Seiten als Bilder gerendert und wie Fotos behandelt.
-export async function readPdf(file, { maxPages = 20, maxChars = 24000 } = {}) {
+// PDF lesen: Text pro Seite. Hat das PDF keinen Text (eingescannt),
+// werden Seiten als Bilder gerendert und wie Fotos behandelt.
+// Groq schafft pro Scan rund 14'000 Zeichen; bei langen PDFs wählt
+// man darum einen Seitenbereich (fitPages schlägt einen vor).
+export const MAX_SCAN_CHARS = 14000
+
+async function openPdf(file) {
   // "legacy"-Build: bringt Polyfills mit, läuft damit auch in älteren Safari-Versionen
   const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs')
   const worker = (await import('pdfjs-dist/legacy/build/pdf.worker.min.mjs?url')).default
   pdfjs.GlobalWorkerOptions.workerSrc = worker
-  const doc = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise
-  let text = ''
-  const pages = Math.min(doc.numPages, maxPages)
-  for (let i = 1; i <= pages && text.length < maxChars; i++) {
+  return pdfjs.getDocument({ data: await file.arrayBuffer() }).promise
+}
+
+export async function readPdf(file, { maxPages = 120 } = {}) {
+  const doc = await openPdf(file)
+  const pageTexts = []
+  for (let i = 1; i <= Math.min(doc.numPages, maxPages); i++) {
     const page = await doc.getPage(i)
     const content = await page.getTextContent()
-    text += content.items.map(it => it.str).join(' ').replace(/\s+/g, ' ') + '\n\n'
+    pageTexts.push(content.items.map(it => it.str).join(' ').replace(/\s+/g, ' ').trim())
   }
-  text = text.trim().slice(0, maxChars)
-  if (text.length >= 200) return { text, images: [], pages: doc.numPages }
+  const total = pageTexts.reduce((n, t) => n + t.length, 0)
+  const scanned = total < 200
+  // Eingescannte Seiten rendert der Dialog selbst (je nach gewähltem Bereich)
+  return { pages: doc.numPages, pageTexts: scanned ? [] : pageTexts, scanned, images: [] }
+}
 
+// Seiten from..from+count-1 als JPEG rendern (für eingescannte PDFs)
+export async function renderPdfPages(file, from = 1, count = MAX_IMAGES, doc = null) {
+  const pdf = doc || await openPdf(file)
   const images = []
-  for (let i = 1; i <= Math.min(doc.numPages, MAX_IMAGES); i++) {
-    const page = await doc.getPage(i)
+  for (let i = from; i <= Math.min(pdf.numPages, from + count - 1); i++) {
+    const page = await pdf.getPage(i)
     const viewport = page.getViewport({ scale: 1 })
     const scale = Math.min(2, 1600 / Math.max(viewport.width, viewport.height))
     const vp = page.getViewport({ scale })
@@ -77,11 +91,27 @@ export async function readPdf(file, { maxPages = 20, maxChars = 24000 } = {}) {
     await page.render({ canvasContext: ctx, viewport: vp }).promise
     images.push(canvas.toDataURL('image/jpeg', 0.82))
   }
-  return { text: '', images, pages: doc.numPages }
+  return images
 }
 
-export async function scanMaterial({ images = [], text = '', hint = '' }) {
-  const { data, error } = await supabase.functions.invoke('scan', { body: { images, text, hint } })
+// Bis zu welcher Seite passt der Text ab `from` in einen Scan?
+export function fitPages(pageTexts, from = 1, budget = MAX_SCAN_CHARS) {
+  let used = 0
+  let to = from
+  for (let i = from; i <= pageTexts.length; i++) {
+    used += pageTexts[i - 1].length + 2
+    if (used > budget && i > from) break
+    to = i
+  }
+  return to
+}
+
+export function pdfRangeText(pageTexts, from, to) {
+  return pageTexts.slice(from - 1, to).filter(Boolean).join('\n\n')
+}
+
+export async function scanMaterial({ images = [], text = '', hint = '', mode = 'plan', topic = '' }) {
+  const { data, error } = await supabase.functions.invoke('scan', { body: { images, text, hint, mode, topic } })
   if (error) {
     let message = ''
     try { message = (await error.context.json())?.message || '' } catch { /* keine JSON-Antwort */ }

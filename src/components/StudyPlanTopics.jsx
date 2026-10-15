@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { supabase } from '../supabaseClient.js'
 import { onPlanChanged, onScrollToTopics, recordProgress } from '../lib/progress.js'
 import { priorityClass, sortSubjects } from '../lib/plan.js'
-import { Sparkles, Camera, FileText } from 'lucide-react'
+import { Sparkles, Camera, FileText, NotebookPen } from 'lucide-react'
 import { requestScan } from '../lib/scan.js'
+import { onSummariesChanged, openSummary } from '../lib/summaries.js'
 import { lastScoresByTopic, scoreClass } from '../lib/quiz.js'
 import { lumiEmit } from '../lib/lumi.js'
 
@@ -45,6 +46,7 @@ export default function StudyPlanTopics({ userId, onNavigate, onStartQuiz }) {
   const topicRefs = useRef({})
   const pendingHighlight = useRef(null)
   const [notesOpen, setNotesOpen] = useState(() => new Set())
+  const [sheetsByTopic, setSheetsByTopic] = useState({})
 
   // Eigene Änderungen werden optimistisch gesetzt; neu geladen wird nur,
   // wenn eine andere Komponente (z.B. der Timer) den Plan verändert hat.
@@ -52,10 +54,12 @@ export default function StudyPlanTopics({ userId, onNavigate, onStartQuiz }) {
 
   useEffect(() => {
     load()
-    return onPlanChanged(() => {
+    const offSheets = onSummariesChanged(load)
+    const offPlan = onPlanChanged(() => {
       if (selfChange.current) { selfChange.current = false; return }
       load()
     })
+    return () => { offSheets(); offPlan() }
   }, [userId])
 
   // WeeklyFocusCard schickt beim Klick auf eine Fokus-Zeile die
@@ -86,13 +90,17 @@ export default function StudyPlanTopics({ userId, onNavigate, onStartQuiz }) {
   }, [highlightTopicIds])
 
   async function load() {
-    const [{ data: s }, { data: t }, { data: st }, lastScores] = await Promise.all([
+    const [{ data: s }, { data: t }, { data: st }, lastScores, { data: sheets }] = await Promise.all([
       supabase.from('plan_subjects').select('*').eq('user_id', userId),
       supabase.from('plan_topics').select('*').eq('user_id', userId).order('sort_order', { ascending: true }),
       supabase.from('plan_subtasks').select('*').eq('user_id', userId).order('sort_order', { ascending: true }),
       lastScoresByTopic(userId),
+      supabase.from('summaries').select('id, title, topic_id').eq('user_id', userId).order('created_at', { ascending: true }),
     ])
     setScores(lastScores)
+    const bySheet = {}
+    for (const sh of sheets || []) if (sh.topic_id) (bySheet[sh.topic_id] ||= []).push(sh)
+    setSheetsByTopic(bySheet)
     setSubjects(sortSubjects(s || []))
     setTopics(t || [])
 
@@ -249,6 +257,7 @@ export default function StudyPlanTopics({ userId, onNavigate, onStartQuiz }) {
                     const tPct = tUnits.total ? Math.round((tUnits.done / tUnits.total) * 100) : 0
                     const topicExpanded = expandedTopicId === t.id
                     const isHighlighted = highlightTopicIds.includes(t.id)
+                    const sheets = sheetsByTopic[t.id] || []
 
                     return (
                       <li
@@ -272,15 +281,14 @@ export default function StudyPlanTopics({ userId, onNavigate, onStartQuiz }) {
                           ) : (
                             <span className="topic-title">{t.title}</span>
                           )}
-                          {t.notes && (
-                            <button
-                              type="button" className={`notes-btn ${notesOpen.has(t.id) ? 'open' : ''}`}
-                              onClick={() => setNotesOpen(cur => { const n = new Set(cur); n.has(t.id) ? n.delete(t.id) : n.add(t.id); return n })}
-                              aria-expanded={notesOpen.has(t.id)} aria-label={`Zusammenfassung zu ${t.title}`} title="Zusammenfassung"
-                            >
-                              <FileText size={13} strokeWidth={2} />
-                            </button>
-                          )}
+                          <button
+                            type="button" className={`notes-btn ${notesOpen.has(t.id) ? 'open' : ''} ${t.notes || sheets.length ? 'has' : ''}`}
+                            onClick={() => setNotesOpen(cur => { const n = new Set(cur); n.has(t.id) ? n.delete(t.id) : n.add(t.id); return n })}
+                            aria-expanded={notesOpen.has(t.id)} aria-label={`Zusammenfassungen zu ${t.title}`} title="Zusammenfassungen"
+                          >
+                            <FileText size={13} strokeWidth={2} />
+                            {sheets.length > 0 && <span>{sheets.length}</span>}
+                          </button>
                           <button
                             type="button"
                             className={`quiz-topic-btn ${scores[t.id] ? scoreClass(scores[t.id].pct) : ''}`}
@@ -293,7 +301,26 @@ export default function StudyPlanTopics({ userId, onNavigate, onStartQuiz }) {
                           </button>
                         </div>
 
-                        {t.notes && notesOpen.has(t.id) && <p className="topic-notes">{t.notes}</p>}
+                        {notesOpen.has(t.id) && (
+                          <div className="topic-notes">
+                            {t.notes && <p>{t.notes}</p>}
+                            {sheets.length > 0 && (
+                              <div className="topic-sheets">
+                                {sheets.map(sh => (
+                                  <button key={sh.id} type="button" className="topic-sheet" onClick={() => openSummary(sh.id)}>
+                                    <FileText size={13} strokeWidth={2.2} /> {sh.title}
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+                            <button
+                              type="button" className="topic-sheet-add"
+                              onClick={() => requestScan({ mode: 'summary', subjectId: t.subject_id, topicId: t.id })}
+                            >
+                              <NotebookPen size={13} strokeWidth={2.2} /> {sheets.length ? 'Weitere Zusammenfassung' : 'Zusammenfassung'} aus Foto oder PDF
+                            </button>
+                          </div>
+                        )}
 
                         {subtasks.length > 0 && (
                           <div className="topic-progress-track">

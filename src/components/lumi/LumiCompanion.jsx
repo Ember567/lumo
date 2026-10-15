@@ -10,6 +10,7 @@ import {
 } from '../../lib/coach.js'
 import { onLumiEvent, quip, isLumiQuiet, timerRunning } from '../../lib/lumi.js'
 import { requestScan } from '../../lib/scan.js'
+import { openSummary } from '../../lib/summaries.js'
 import Firefly from './Firefly.jsx'
 
 // ------------------------------------------------------------
@@ -305,6 +306,31 @@ export default function LumiCompanion({ userId, section, onNavigate, onStartQuiz
           })
           later('bubble', () => setBubble(cur => (cur?.kind === 'tip' ? null : cur)), 25000)
         }, 900)
+        break
+      }
+      case 'summary-saved': {
+        const el = document.querySelector(`[data-summary-id="${ev.id}"]`)
+        if (el) flyTo(el, { ms: 9000, anchor: 'right' })
+        later('sumReact', () => {
+          const r = visible(el)
+          if (r) burst(r.left + r.width / 2, r.top + 16, 60, 1.3)
+          script('loop', 1000); flash('happy', 2200)
+          const st = ev.stats || {}
+          const parts = [
+            st.sections && `${st.sections} Abschnitte`,
+            st.terms && `${st.terms} Begriffe`,
+            st.questions && `${st.questions} Kontrollfragen`,
+          ].filter(Boolean)
+          setBubble({
+            kind: 'tip', at: Date.now(),
+            text: `Deine Zusammenfassung «${ev.title}» ist fertig${parts.length ? `: ${parts.join(', ')}` : ''}. Die Abfragen stützen sich ab jetzt darauf.`,
+            actions: [
+              { type: 'open_summary', label: 'Lesen', id: ev.id },
+              ev.topic?.id && { type: 'start_quiz', label: 'Gleich abfragen', topic: ev.topic },
+            ].filter(Boolean),
+          })
+          later('bubble', () => setBubble(cur => (cur?.kind === 'tip' ? null : cur)), 25000)
+        }, 1200)
         break
       }
       case 'task-done': {
@@ -636,7 +662,8 @@ export default function LumiCompanion({ userId, section, onNavigate, onStartQuiz
 
   function hoverAction(a, on) {
     const el = a.type === 'start_quiz' ? topicEl(a.target?.id || a.topic?.id)
-      : a.type === 'open_section' ? navEl(a.section) : null
+      : a.type === 'open_section' ? navEl(a.section)
+        : a.type === 'open_summary' ? document.querySelector(`[data-summary-id="${a.id}"]`) : null
     if (on && visible(el)) { spotlight(el, 1600); m.current.lookAt = el; m.current.lookUntil = Date.now() + 1600 }
   }
 
@@ -654,6 +681,7 @@ export default function LumiCompanion({ userId, section, onNavigate, onStartQuiz
       return
     }
     setBubble(null)
+    if (a.type === 'open_summary') { openSummary(a.id); flash('happy', 1200); return }
     if (a.type === 'open_section') {
       const el = navEl(a.section)
       if (visible(el)) { flyTo(el, { ms: 1500, anchor: 'right' }); spotlight(el, 1200) }
@@ -757,6 +785,7 @@ export default function LumiCompanion({ userId, section, onNavigate, onStartQuiz
                     <div className="lumi-chips">
                       {QUICK_PROMPTS.slice(0, 3).map(q => <button key={q} type="button" onClick={() => send(q)}>{q}</button>)}
                       <button type="button" className="lumi-chip-scan" onClick={() => { setBubble(null); requestScan() }}>Lernstoff scannen</button>
+                      <button type="button" className="lumi-chip-scan" onClick={() => { setBubble(null); requestScan({ mode: 'summary' }) }}>Zusammenfassung erstellen</button>
                     </div>
                   </>
                 )}

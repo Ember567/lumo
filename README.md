@@ -21,6 +21,7 @@ Live: **https://lumo.berendak.ch**
 | **Vorlagen** | Startklare Lernpläne beim Onboarding oder später dazuladen. Alle Daten werden auf ein frei wählbares Startdatum verschoben. Mitgeliefert: *Passerelle + EMS (Schweiz)* mit 110 Themen nach den SBFI-Richtlinien 2023, und ein kleiner Beispielplan. |
 | **Abfragen (KI)** | Eigener Bereich zum Ausfragen: Thema oder ganzes Fach wählen, die KI erstellt Multiple-Choice-Fragen. Frage für Frage mit sofortigem Feedback und Erklärung, danach Auswertung. Vorschläge (schwache, erledigte aber nie abgefragte, lange nicht geübte Themen), Stand pro Fach, Verlauf und ein Fehlerheft, dessen Fragen sich ohne KI erneut üben lassen. |
 | **Foto rein, Lernplan raus** | Foto vom Arbeitsblatt, Buchseite, PDF oder eingefügter Text: Die KI macht daraus ein Fach mit Themen, je einer Zusammenfassung und Lernzielen. Vor dem Anlegen kann man alles prüfen und anpassen. Die Abfragen stützen sich danach auf diese Zusammenfassungen. Bilder werden im Browser verkleinert und nicht gespeichert. |
+| **Zusammenfassungen** | Foto oder PDF (bei langen PDFs mit Seitenbereich) rein, Lernblatt raus: Überblick, Abschnitte mit Stichpunkten, Begriffe, Formeln und Kontrollfragen zum Aufdecken. Hängt an einem Thema, ist druckbar und dient den Abfragen als Grundlage. Gespeichert wird nur der Text (wenige KB). |
 | **Lichtwiese** | Eine Nachtwiese mit einem Glühwürmchen pro Lerntag der letzten 12 Wochen, je heller, desto mehr gelernt. Im Vollbild steigt auf Knopfdruck ein Schwarm auf und schreibt den Fortschritt des wichtigsten Ziels in den Himmel. |
 | **KI-Kontingent** | In den Einstellungen: eigene Tageslimits (Abfragen, Lumi, Scans), die Limits von Groq pro Modell (Anfragen pro Tag, Tokens pro Minute) und der Verlauf der letzten 7 Tage. |
 | **Lumi, das Glühwürmchen** | Ein animiertes Glühwürmchen fliegt über die Seite und reagiert auf das, was du tust: Es fliegt zum abgehakten Thema und lässt Funken regnen, setzt sich mit einem Buch auf den laufenden Timer, macht bei richtigen Antworten einen Looping und zuckt bei falschen zusammen, setzt in den Abfragen eine Brille auf und schläft nachts mit Zipfelmütze. Seine Laterne leuchtet heller, je mehr du heute gelernt hast. Lumi zeigt Tipps in Comic-Sprechblasen, fliegt dabei zum passenden Thema und lässt sich antippen, um Fragen zu stellen. Vorgeschlagene Aktionen (Abfrage starten, Bereich öffnen, Aufgabe anlegen) führst du per Klick aus. |
@@ -113,6 +114,7 @@ Reihenfolge: **1. Supabase → 2. Lokal testen → 3. Vercel → 4. Domain bei H
    Alternativ mit der Supabase CLI: `supabase functions deploy quiz`.
 4. Für Foto-Scan und Kontingent-Anzeige: [`supabase/migrations/004_scan_kontingent.sql`](supabase/migrations/004_scan_kontingent.sql)
    ausführen und eine Function `scan` mit [`supabase/functions/scan/index.ts`](supabase/functions/scan/index.ts) anlegen.
+   Für Zusammenfassungen zusätzlich [`supabase/migrations/005_zusammenfassungen.sql`](supabase/migrations/005_zusammenfassungen.sql) ausführen.
 5. Gleich für den Lernbegleiter: [`supabase/migrations/003_coach.sql`](supabase/migrations/003_coach.sql) ausführen
    und eine zweite Function `coach` mit [`supabase/functions/coach/index.ts`](supabase/functions/coach/index.ts) anlegen.
 6. **Edge Functions → Secrets:** `AI_API_KEY` = dein Groq-Key (gilt für alle Functions).
@@ -158,8 +160,8 @@ npm run dev               # http://localhost:5173
 ```
 ├── supabase/
 │   ├── schema.sql               Komplettes Datenbankschema (Tabellen, RLS, Funktionen)
-│   ├── migrations/              002 KI-Quiz, 003 Lernbegleiter, 004 Scan + Kontingent
-│   └── functions/               quiz: Fragen · coach: Lumi · scan: Lernmaterial → Lernplan
+│   ├── migrations/              002 KI-Quiz, 003 Lernbegleiter, 004 Scan + Kontingent, 005 Zusammenfassungen
+│   └── functions/               quiz: Fragen · coach: Lumi · scan: Lernmaterial → Lernplan oder Zusammenfassung
 ├── src/
 │   ├── App.jsx                  Login-Weiche, Onboarding, Navigation
 │   ├── config.js                App-Name und Claim
@@ -178,7 +180,8 @@ npm run dev               # http://localhost:5173
 │       ├── StudyPlanTopics.jsx  Themen-Checkliste
 │       ├── StudyBurndown.jsx    Soll/Ist pro Phase
 │       ├── Progress.jsx         Fortschritt + Verlauf pro Ziel
-│       ├── scan/                Foto rein, Lernplan raus
+│       ├── scan/                Foto rein, Lernplan oder Zusammenfassung raus
+│       ├── summaries/           Zusammenfassungen: Karte, Leseansicht, Inhalt
 │       ├── meadow/              Lichtwiese (Canvas, Finale)
 │       ├── QuotaCard.jsx        KI-Kontingent
 │       ├── lumi/                Lumi: Glühwürmchen (SVG), Flug, Reaktionen, Sprechblasen
