@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { supabase } from '../supabaseClient.js'
-import { APP_NAME, APP_TAGLINE } from '../config.js'
+import { APP_NAME, APP_TAGLINE, ALLOW_SIGNUP, loginEmail } from '../config.js'
 import BrandMark from './BrandMark.jsx'
 
 const ERRORS = {
-  'Invalid login credentials': 'E-Mail oder Passwort ist falsch.',
+  'Invalid login credentials': 'Benutzername, E-Mail oder Passwort ist falsch.',
+  'Signups not allowed for this instance': 'Neue Konten können hier nicht erstellt werden.',
   'Email not confirmed': 'Bitte bestätige zuerst deine E-Mail-Adresse (Link in deinem Postfach).',
   'User already registered': 'Für diese E-Mail gibt es bereits ein Konto.',
 }
@@ -31,9 +32,11 @@ export default function Auth() {
     setMsg(null)
 
     if (mode === 'login') {
-      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      const { error } = await supabase.auth.signInWithPassword({ email: loginEmail(email), password })
       if (error) setMsg({ text: translate(error.message) })
-    } else if (mode === 'signup') {
+    } else if (mode === 'forgot' && !email.includes('@')) {
+      setMsg({ text: 'Für ein Konto mit Benutzernamen gibt es keinen Link per E-Mail. Frag die Person, die das Konto angelegt hat.' })
+    } else if (mode === 'signup' && ALLOW_SIGNUP) {
       const { data, error } = await supabase.auth.signUp({
         email, password, options: { emailRedirectTo: window.location.origin },
       })
@@ -57,9 +60,18 @@ export default function Auth() {
         <p className="auth-sub">{mode === 'forgot' ? 'Wir schicken dir einen Link, um ein neues Passwort zu setzen.' : APP_TAGLINE}</p>
 
         <form className="auth-form" onSubmit={submit}>
-          <label>E-Mail
-            <input type="email" required value={email} onChange={e => setEmail(e.target.value)} autoComplete="email" />
-          </label>
+          {mode === 'login' ? (
+            <label>E-Mail oder Benutzername
+              <input
+                type="text" required value={email} onChange={e => setEmail(e.target.value)}
+                autoComplete="username" autoCapitalize="none" autoCorrect="off" spellCheck={false}
+              />
+            </label>
+          ) : (
+            <label>E-Mail
+              <input type="email" required value={email} onChange={e => setEmail(e.target.value)} autoComplete="email" />
+            </label>
+          )}
           {mode !== 'forgot' && (
             <label>Passwort {mode === 'signup' && <span className="hint">(mind. 8 Zeichen)</span>}
               <input
@@ -77,7 +89,7 @@ export default function Auth() {
         <div className="auth-links">
           {mode === 'login' && (
             <>
-              <button type="button" className="link-btn" onClick={() => switchMode('signup')}>Noch kein Konto? Registrieren</button>
+              {ALLOW_SIGNUP && <button type="button" className="link-btn" onClick={() => switchMode('signup')}>Noch kein Konto? Registrieren</button>}
               <button type="button" className="link-btn" onClick={() => switchMode('forgot')}>Passwort vergessen?</button>
             </>
           )}

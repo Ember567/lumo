@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { LayoutDashboard, BookOpen, GraduationCap, Route, ListChecks, Link2, Settings as SettingsIcon, Menu } from 'lucide-react'
 import { supabase, supabaseConfigured, supabaseConfigError } from './supabaseClient.js'
-import { APP_NAME, STORAGE_PREFIX } from './config.js'
+import { APP_NAME, STORAGE_PREFIX, accountLabel } from './config.js'
 import { fmtLong } from './lib/dates.js'
 import Auth, { SetNewPassword } from './components/Auth.jsx'
 import BrandMark from './components/BrandMark.jsx'
@@ -226,7 +226,7 @@ function Dashboard({ session }) {
         {activeSection === 'settings' && (
           <SettingsView
             userId={userId}
-            email={session.user.email}
+            email={accountLabel(session.user.email)}
             settings={settings}
             onSettingsChange={setSettings}
             onNavigate={navigate}
