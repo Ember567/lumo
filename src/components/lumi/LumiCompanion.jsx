@@ -72,7 +72,14 @@ function spotlight(el, ms = 2600) {
 }
 
 const topicEl = id => document.querySelector(`[data-topic-id="${id}"]`)
-const navEl = id => document.querySelector(`[data-lumi-nav="${id}"]`)
+// Auf dem Handy zeigt Lumi auf die untere Tab-Leiste (Bereiche unter «Mehr» auf den Mehr-Knopf).
+const navEl = id => {
+  const bar = document.querySelector('.mobile-tabbar')
+  if (bar && bar.getBoundingClientRect().height > 0) {
+    return bar.querySelector(`[data-lumi-nav-mobile="${id}"]`) || bar.querySelector('[aria-expanded]')
+  }
+  return document.querySelector(`[data-lumi-nav="${id}"]`)
+}
 
 export default function LumiCompanion({ userId, section, onNavigate, onStartQuiz }) {
   const [hidden, setHidden] = useState(isLumiHidden)
@@ -108,6 +115,7 @@ export default function LumiCompanion({ userId, section, onNavigate, onStartQuiz
   })
 
   const media = useRef({ mobile: false, reduced: false })
+  const tabbarH = useRef(0) // Höhe der unteren Tab-Leiste (nur Handy)
 
   // ---------- Sichtbarkeit & Einstellungen ----------
   useEffect(() => onLumiVisibility(() => {
@@ -188,9 +196,16 @@ export default function LumiCompanion({ userId, section, onNavigate, onStartQuiz
       m.current.size = mq1.matches ? 50 : 64
       setMobile(mq1.matches)
     }
-    upd()
+    const measure = () => { tabbarH.current = document.querySelector('.mobile-tabbar')?.getBoundingClientRect().height || 0 }
+    upd(); measure()
+    const t = window.setTimeout(measure, 300)
     mq1.addEventListener('change', upd); mq2.addEventListener('change', upd)
-    return () => { mq1.removeEventListener('change', upd); mq2.removeEventListener('change', upd) }
+    window.addEventListener('resize', measure)
+    return () => {
+      window.clearTimeout(t)
+      mq1.removeEventListener('change', upd); mq2.removeEventListener('change', upd)
+      window.removeEventListener('resize', measure)
+    }
   }, [])
 
   // ---------- Bereich ----------
@@ -443,7 +458,7 @@ export default function LumiCompanion({ userId, section, onNavigate, onStartQuiz
       const wall = Date.now()
 
       // --- Zuhause ---
-      const home = mobile ? { x: vw - 36, y: vh - 44 } : { x: vw - 58, y: vh - 62 }
+      const home = mobile ? { x: vw - 36, y: vh - 44 - tabbarH.current } : { x: vw - 58, y: vh - 62 }
       if (!s.init) { s.x = home.x + 40; s.y = home.y + 80; s.init = true }
 
       // --- Schlafen: nachts, wenn länger nichts passiert ---

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import GoalsEditor from './GoalsEditor.jsx'
 import PhasesEditor from './PhasesEditor.jsx'
 import SubjectsEditor from './SubjectsEditor.jsx'
@@ -16,10 +16,19 @@ const TABS = [
 export default function Planner({ userId, tab, onTabChange }) {
   const active = TABS.find(t => t.id === tab) || TABS[0]
   const Editor = active.component
+  const tabsRef = useRef(null)
+
+  // Auf dem Handy ist die Reiterleiste wischbar: den aktiven Reiter sichtbar halten.
+  useEffect(() => {
+    const bar = tabsRef.current
+    const el = bar?.querySelector('.planner-tab.active')
+    if (!bar || !el || bar.scrollWidth <= bar.clientWidth) return
+    bar.scrollTo({ left: el.offsetLeft - (bar.clientWidth - el.offsetWidth) / 2, behavior: 'smooth' })
+  }, [active.id])
 
   return (
     <div className="plan-section">
-      <div className="planner-tabs" role="tablist" aria-label="Planer-Bereiche">
+      <div className="planner-tabs" ref={tabsRef} role="tablist" aria-label="Planer-Bereiche">
         {TABS.map(t => (
           <button
             key={t.id} type="button" role="tab" aria-selected={t.id === active.id}

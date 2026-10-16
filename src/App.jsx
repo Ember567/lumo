@@ -7,6 +7,7 @@ import Auth, { SetNewPassword } from './components/Auth.jsx'
 import BrandMark from './components/BrandMark.jsx'
 import Onboarding from './components/Onboarding.jsx'
 import Sidebar from './components/Sidebar.jsx'
+import MobileNav from './components/MobileNav.jsx'
 import StatusBar from './components/StatusBar.jsx'
 import NextUp from './components/NextUp.jsx'
 import OverviewSummary from './components/OverviewSummary.jsx'
@@ -168,7 +169,10 @@ function Dashboard({ session }) {
             <Menu size={20} strokeWidth={2} />
           </button>
           <h1 className="content-title" key={activeSection}>{title}</h1>
-          <span className="today">{fmtLong(new Date())}</span>
+          <span className="today">
+            <span className="today-long">{fmtLong(new Date())}</span>
+            <span className="today-short">{new Date().toLocaleDateString('de-CH', { weekday: 'short', day: 'numeric', month: 'short' })}</span>
+          </span>
         </header>
 
         {activeSection === 'overview' && (
@@ -235,6 +239,8 @@ function Dashboard({ session }) {
 
         <footer className="foot">{APP_NAME} · deine Ziele, deine Daten</footer>
       </div>
+
+      <MobileNav sections={SECTIONS} active={activeSection} onChange={navigate} onLogout={() => supabase.auth.signOut()} />
 
       <LumiCompanion userId={userId} section={activeSection} onNavigate={navigate} onStartQuiz={startQuiz} />
       {scan && (

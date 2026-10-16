@@ -3735,3 +3735,133 @@ input[type="checkbox"] { accent-color: var(--paper); }
 html, body { overflow-x: clip; }
 .lumi-root { overflow: hidden; }
 .overview-tile-label { display: block; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* =====================================================================
+   HANDY: untere Tab-Leiste, Daumen-taugliche Ziele, kein iOS-Zoom
+   ===================================================================== */
+.mobile-tabbar, .today-short { display: none; }
+.study-phase-banner { padding: 6px 12px; }
+
+@media (max-width: 767px) {
+  /* --- Tab-Leiste statt Hamburger --- */
+  .mobile-menu-btn, .sidebar, .sidebar-backdrop { display: none !important; }
+  .mobile-tabbar {
+    display: grid; grid-template-columns: repeat(5, minmax(0, 1fr));
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 45;
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+    background: var(--ink-2); border-top: var(--edge);
+  }
+  .mnav-tab {
+    display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 0;
+    padding: 2px 0; background: none; border: none; font: inherit; color: var(--text-2);
+    cursor: pointer; -webkit-tap-highlight-color: transparent; touch-action: manipulation;
+  }
+  .mnav-pill {
+    display: flex; align-items: center; justify-content: center; width: 54px; height: 32px;
+    border-radius: 999px; border: 2px solid transparent;
+    transition: background var(--transition), transform 160ms var(--ease-out);
+  }
+  .mnav-label { max-width: 100%; font-size: 11.5px; font-weight: 600; line-height: 1.1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mnav-tab.active { color: var(--paper); }
+  .mnav-tab.active .mnav-pill { background: var(--tab-accent); border-color: var(--paper); box-shadow: var(--hard-sm), var(--clay); }
+  .mnav-tab.active .mnav-label { font-weight: 800; }
+  .mnav-tab:active .mnav-pill { transform: scale(0.92); }
+
+  .mnav-backdrop {
+    position: fixed; inset: 0; z-index: 70; display: flex; align-items: flex-end;
+    background: rgba(30, 27, 46, 0.38); animation: fadeIn 160ms ease-out;
+  }
+  .mnav-sheet {
+    width: 100%; display: flex; flex-direction: column; gap: 8px;
+    padding: 14px 16px calc(18px + env(safe-area-inset-bottom));
+    background: var(--ink); border-top: var(--edge); border-radius: 26px 26px 0 0;
+    animation: mnav-up 260ms var(--ease-out) both;
+  }
+  .mnav-sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 0 2px 4px; }
+  .mnav-sheet-head strong { font-family: var(--font-display); font-size: 22px; font-weight: 800; }
+  .mnav-sheet-item {
+    display: flex; align-items: center; gap: 14px; min-height: 54px; padding: 8px 14px;
+    font: inherit; font-size: 16px; font-weight: 600; color: var(--paper); text-align: left;
+    background: var(--ink-2); border: var(--edge); border-radius: 16px; box-shadow: var(--hard-sm);
+    cursor: pointer; -webkit-tap-highlight-color: transparent;
+  }
+  .mnav-sheet-item:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 var(--paper); }
+  .mnav-sheet-icon {
+    display: flex; align-items: center; justify-content: center; width: 36px; height: 36px;
+    border-radius: 12px; border: 1.5px solid var(--paper); background: var(--tab-accent, var(--surface-hover));
+  }
+  .mnav-sheet-item.active { font-weight: 800; background: var(--surface-hover); }
+  .mnav-logout { margin-top: 6px; box-shadow: none; border-style: dashed; }
+  .mnav-logout .mnav-sheet-icon { background: #FFC2D0; }
+
+  /* Platz für die Leiste, Notch oben */
+  .main-content { padding-top: calc(16px + env(safe-area-inset-top)); padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
+  .foot { margin-top: 20px; }
+  .lumi-sheet { bottom: calc(80px + env(safe-area-inset-bottom)); }
+
+  /* --- Kopfzeile in einer Zeile --- */
+  .content-header { flex-wrap: nowrap; gap: 10px; margin-bottom: 20px; }
+  .content-title { min-width: 0; font-size: 28px; padding: 7px 14px 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .today { flex: 0 0 auto; font-size: 12.5px; padding: 5px 10px; white-space: nowrap; }
+  .today-long { display: none; }
+  .today-short { display: inline; }
+
+  /* --- Kein Hineinzoomen auf iOS beim Tippen in ein Feld --- */
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="file"]),
+  select, textarea { font-size: 16px !important; }
+  .inline-field { min-height: 40px; padding: 6px 10px; }
+  .inline-date, .inline-select, .inline-number { min-height: 40px; }
+
+  /* --- Tippziele für den Daumen --- */
+  .subject-header { min-height: 40px; padding: 4px 0; }
+  .quiz-count button { min-width: 46px; min-height: 42px; }
+  .quiz-quota { min-height: 36px; }
+  .subject-count { min-height: 34px; }
+  .plan-section details > summary { padding: 8px 0; }
+  .task-del, .event-del { min-width: 40px; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; }
+  .link-card-open, .link-card-del { width: 40px; height: 40px; }
+  .icon-btn { width: 40px; height: 40px; }
+  .tl-del { min-width: 36px; min-height: 36px; }
+
+  /* --- Reiter: Abfrage-Art als gleichmässige Dreiteilung, sonst wischbar --- */
+  .quiz-modes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; border-radius: 18px; }
+  .quiz-mode { flex: none; min-height: 44px; padding: 6px 4px; font-size: 13px; line-height: 1.15; text-align: center; border-radius: 14px; }
+  .planner-tabs, .timeline-filter-bar {
+    position: relative; display: flex; flex-wrap: nowrap; max-width: 100%; overflow-x: auto;
+    scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain;
+  }
+  .planner-tabs::-webkit-scrollbar, .timeline-filter-bar::-webkit-scrollbar { display: none; }
+  .planner-tab, .timeline-filter-btn { flex: 0 0 auto; white-space: nowrap; min-height: 40px; }
+
+  /* --- Abfrage: «Weiter» bleibt über der Tab-Leiste in Reichweite --- */
+  .quiz-card-foot {
+    position: sticky; bottom: calc(74px + env(safe-area-inset-bottom)); z-index: 3;
+    margin: 16px -6px 0; padding: 10px 6px 0;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), var(--ink-2) 14px);
+  }
+
+  /* --- Lern-Timer: Uhr und Start zuerst, Statistik danach --- */
+  .card-study { display: flex; flex-direction: column; }
+  .card-study > .card-head { order: 0; }
+  .card-study > .study-phase-banner { order: 1; }
+  .card-study > .study-timer-display { order: 2; margin-top: 0; font-size: 52px; }
+  .card-study > .study-topic-row { order: 3; }
+  .card-study > .study-controls { order: 4; }
+  .card-study > .field-hint, .card-study > .study-confirm { order: 5; }
+  .card-study > .study-stats { order: 6; margin-top: 20px; }
+  .card-study > .study-breakdown { order: 7; }
+  .study-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .study-stat { min-width: 0; padding: 10px; }
+  .study-stat-label { font-size: 11.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .study-stat-value { font-size: 17px; }
+
+  /* --- Etwas lesbarer --- */
+  .priority-badge { font-size: 11.5px; }
+  .link-card-url { font-size: 12px; }
+}
+
+/* Kachelraster mit 2 Spalten: eine übrige Kachel nimmt die ganze Breite */
+@media (max-width: 560px) { .weekly-stats > :last-child:nth-child(odd) { grid-column: 1 / -1; } }
+
+@keyframes mnav-up { from { transform: translateY(100%); } to { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .mnav-sheet, .mnav-backdrop { animation: none; } }
