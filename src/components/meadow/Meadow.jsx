@@ -120,7 +120,11 @@ async function textPoints(text, w, h, maxPoints) {
   return []
 }
 
-export function MeadowScene({ data, height, finale = 0, onFinaleDone, className = '' }) {
+export function MeadowScene({ data, height, finale = 0, finaleLabel = '', onFinaleDone, className = '' }) {
+  const doneRef = useRef(onFinaleDone)
+  doneRef.current = onFinaleDone
+  const labelRef = useRef(finaleLabel)
+  labelRef.current = finaleLabel
   const wrapRef = useRef(null)
   const canvasRef = useRef(null)
   const [tip, setTip] = useState(null)
@@ -241,7 +245,7 @@ export function MeadowScene({ data, height, finale = 0, onFinaleDone, className 
         }
         ctx.globalCompositeOperation = 'source-over'
         ctx.globalAlpha = 1
-        if (!alive && e > 2) { S.swarm = null; onFinaleDone?.() }
+        if (!alive && e > 2) { S.swarm = null; doneRef.current?.() }
       }
       ctx.drawImage(S.layers.fg, 0, 0, w, h)
       if (!reduced || S.swarm) raf = S.visible && !document.hidden ? requestAnimationFrame(frame) : 0
@@ -285,7 +289,7 @@ export function MeadowScene({ data, height, finale = 0, onFinaleDone, className 
     if (!finale || !S || !data) return
     let cancelled = false
     ;(async () => {
-      const label = data.goal ? `${data.goal.pct}%` : 'Lumo'
+      const label = labelRef.current || (data.goal ? `${data.goal.pct}%` : 'Lumo')
       const small = S.w < 500
       const pts = await textPoints(label, Math.round(S.w), Math.round(S.h), small ? 220 : 420)
       if (cancelled || !pts.length) return
@@ -332,6 +336,7 @@ export default function MeadowCard({ userId }) {
   const caption = data.lit === 0
     ? 'Noch dunkel hier. Jeder Lerntag lässt ein Glühwürmchen aufleuchten.'
     : `${data.lit} ${data.lit === 1 ? 'Tag leuchtet' : 'Tage leuchten'} in den letzten 12 Wochen${data.streak > 1 ? ` · ${data.streak} Tage in Folge` : ''}`
+  const goals = data.goals || []
 
   return (
     <section className="card meadow-card">
@@ -342,17 +347,28 @@ export default function MeadowCard({ userId }) {
         </button>
       </div>
       <MeadowScene data={data} height={window.innerWidth < 600 ? 190 : 240} />
-      <p className="meadow-caption">{caption}</p>
+      <div className="meadow-foot">
+        <p className="meadow-caption">{caption}</p>
+        {goals.length > 0 && (
+          <div className="meadow-goals-mini">
+            {goals.map(g => <span key={g.id}><strong>{g.name}</strong> {g.pct} %</span>)}
+          </div>
+        )}
+      </div>
       {full && <MeadowFullscreen data={data} onClose={() => setFull(false)} />}
     </section>
   )
 }
 
 function MeadowFullscreen({ data, onClose }) {
+  const goals = data.goals || []
+  const [pick, setPick] = useState(goals.length > 1 ? 'all' : goals[0]?.id || '')
+  const [current, setCurrent] = useState(null) // Ziel, das gerade in den Himmel geschrieben wird
   const [finale, setFinale] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [showCaption, setShowCaption] = useState(false)
   const timer = useRef(null)
+  const queue = useRef([])
 
   useEffect(() => {
     const onKey = e => { if (e.key === 'Escape') onClose() }
@@ -362,7 +378,9 @@ function MeadowFullscreen({ data, onClose }) {
     return () => { window.removeEventListener('keydown', onKey); document.body.style.overflow = prev; window.clearTimeout(timer.current) }
   }, [])
 
-  function fly() {
+  function next() {
+    const g = queue.current.shift() ?? null
+    setCurrent(g)
     setPlaying(true)
     setShowCaption(false)
     setFinale(f => f + 1)
@@ -370,9 +388,25 @@ function MeadowFullscreen({ data, onClose }) {
     timer.current = window.setTimeout(() => setShowCaption(true), 3200)
   }
 
+  // Bei "Alle" schreibt der Schwarm die Ziele nacheinander in den Himmel
+  function fly() {
+    queue.current = pick === 'all' ? [...goals] : goals.filter(g => g.id === pick)
+    if (!queue.current.length) queue.current = [null]
+    next()
+  }
+
+  function done() {
+    if (queue.current.length) { next(); return }
+    setPlaying(false)
+    setShowCaption(false)
+  }
+
   return createPortal(
     <div className="meadow-full" role="dialog" aria-modal="true" aria-label="Lichtwiese im Vollbild">
-      <MeadowScene data={data} finale={finale} onFinaleDone={() => { setPlaying(false); setShowCaption(false) }} className="meadow-scene-full" />
+      <MeadowScene
+        data={data} finale={finale} finaleLabel={current ? `${current.pct}%` : ''}
+        onFinaleDone={done} className="meadow-scene-full"
+      />
       <div className="meadow-full-top">
         <div>
           <h2>Deine Lichtwiese</h2>
@@ -381,13 +415,25 @@ function MeadowFullscreen({ data, onClose }) {
         <button type="button" className="meadow-close" onClick={onClose} aria-label="Vollbild schliessen"><X size={20} /></button>
       </div>
       <div className={`meadow-full-caption ${showCaption ? 'show' : ''}`} aria-live="polite">
-        {showCaption && (data.goal
-          ? <><strong>{data.goal.name}</strong> · {data.goal.pct} % geschafft</>
+        {showCaption && (current
+          ? <><strong>{current.name}</strong> · {current.pct} % geschafft</>
           : <><strong>Lumo</strong> · jedes Licht ist ein Lerntag</>)}
       </div>
-      <button type="button" className="btn btn-primary meadow-fly" onClick={fly} disabled={playing}>
-        <Sparkles size={17} strokeWidth={2.2} /> {playing ? 'Sie fliegen …' : 'Fliegen lassen'}
-      </button>
+      <div className="meadow-full-foot">
+        {goals.length > 1 && (
+          <div className="meadow-goal-pick" role="group" aria-label="Welches Ziel?">
+            <button type="button" className={pick === 'all' ? 'on' : ''} aria-pressed={pick === 'all'} onClick={() => setPick('all')} disabled={playing}>Alle</button>
+            {goals.map(g => (
+              <button key={g.id} type="button" className={pick === g.id ? 'on' : ''} aria-pressed={pick === g.id} onClick={() => setPick(g.id)} disabled={playing}>
+                {g.name} <span>{g.pct} %</span>
+              </button>
+            ))}
+          </div>
+        )}
+        <button type="button" className="btn btn-primary meadow-fly" onClick={fly} disabled={playing}>
+          <Sparkles size={17} strokeWidth={2.2} /> {playing ? 'Sie fliegen …' : 'Fliegen lassen'}
+        </button>
+      </div>
     </div>,
     document.body,
   )

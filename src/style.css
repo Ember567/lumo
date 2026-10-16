@@ -3279,10 +3279,31 @@ input[type="checkbox"] { accent-color: var(--paper); }
 }
 .meadow-full-caption.show { opacity: 1; transform: none; }
 .meadow-full-caption strong { font-family: var(--font-display); font-weight: 800; }
+.meadow-full-foot {
+  position: absolute; left: 16px; right: 16px; bottom: 30px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
 .meadow-fly {
-  position: absolute; left: 0; right: 0; bottom: 34px; margin: 0 auto; width: fit-content;
+  margin: 0 auto; width: fit-content;
   font-size: 16px; padding: 12px 22px; gap: 8px; background: var(--sun) !important;
 }
+.meadow-goal-pick {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 5px;
+  border: 1.5px solid rgba(255, 251, 234, 0.35); border-radius: 24px; background: rgba(255, 251, 234, 0.06);
+}
+.meadow-goal-pick button {
+  font: inherit; font-size: 14px; font-weight: 700; color: #FFFBEA; cursor: pointer;
+  padding: 7px 14px; border: 1.5px solid transparent; border-radius: 999px; background: none;
+  transition: background var(--transition), color var(--transition);
+}
+.meadow-goal-pick button span { font-weight: 500; opacity: 0.75; }
+.meadow-goal-pick button:hover:not(:disabled) { background: rgba(255, 251, 234, 0.12); }
+.meadow-goal-pick button.on { color: var(--paper); background: #FFE58A; border-color: #FFFBEA; box-shadow: 0 0 18px rgba(255, 220, 90, 0.45); }
+.meadow-goal-pick button.on span { opacity: 0.8; }
+.meadow-goal-pick button:disabled:not(.on) { opacity: 0.5; cursor: default; }
+.meadow-foot { display: flex; justify-content: space-between; align-items: baseline; gap: 6px 16px; flex-wrap: wrap; }
+.meadow-goals-mini { display: flex; gap: 12px; font-size: 13px; color: var(--text-2); }
+.meadow-goals-mini strong { color: var(--paper); font-weight: 700; }
 .meadow-fly:disabled { opacity: 0.85; }
 
 /* =====================================================================
@@ -3553,3 +3574,5 @@ input[type="checkbox"] { accent-color: var(--paper); }
   .sum-section, .sum-term, .sum-formula, .sum-question, .sum-overview { break-inside: avoid; box-shadow: none !important; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
+.meadow-foot { margin-top: 12px; }
+.meadow-foot .meadow-caption { margin: 0; }

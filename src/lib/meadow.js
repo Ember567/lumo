@@ -57,6 +57,7 @@ export async function loadMeadow(userId) {
     lit,
     streak,
     goal: main ? { name: main.goal.name, pct: main.pct } : null,
+    goals: goals.map(g => ({ id: g.goal.id, name: g.goal.name, pct: g.pct })),
   }
 }
 
