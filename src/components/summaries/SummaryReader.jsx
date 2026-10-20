@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { X, Printer, Trash2, Sparkles, FileText } from 'lucide-react'
+import { X, Printer, Trash2, Sparkles, FileText, FolderInput } from 'lucide-react'
 import { supabase } from '../../supabaseClient.js'
-import { deleteSummary, loadSummary, statsLine } from '../../lib/summaries.js'
+import { deleteSummary, loadSummary, notifySummariesChanged, statsLine } from '../../lib/summaries.js'
 import { lumiEmit } from '../../lib/lumi.js'
 import SummaryBody from './SummaryBody.jsx'
 
@@ -15,7 +15,40 @@ export default function SummaryReader({ id, onClose, onStartQuiz }) {
   const [missing, setMissing] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [error, setError] = useState('')
+  const [place, setPlace] = useState(null) // { title, subjectId, topicId } während «Einordnen» offen ist
+  const [options, setOptions] = useState({ subjects: [], topics: [] })
+  const [saving, setSaving] = useState(false)
   const ref = useRef(null)
+
+  async function openPlace() {
+    if (place) { setPlace(null); return }
+    setPlace({ title: sheet.title, subjectId: sheet.subject_id, topicId: sheet.topic_id || '' })
+    if (!options.subjects.length) {
+      const [{ data: subjects }, { data: topics }] = await Promise.all([
+        supabase.from('plan_subjects').select('id, name').eq('user_id', sheet.user_id).order('sort_order'),
+        supabase.from('plan_topics').select('id, title, subject_id, category').eq('user_id', sheet.user_id).order('sort_order'),
+      ])
+      setOptions({ subjects: subjects || [], topics: topics || [] })
+    }
+  }
+
+  async function savePlace(e) {
+    e.preventDefault()
+    const title = place.title.trim()
+    if (!title) return
+    setSaving(true); setError('')
+    const { error: err } = await supabase.from('summaries')
+      .update({ title, subject_id: place.subjectId, topic_id: place.topicId || null })
+      .eq('id', sheet.id)
+    setSaving(false)
+    if (err) { setError(err.message); return }
+    const subject = options.subjects.find(x => x.id === place.subjectId)
+    const topic = options.topics.find(x => x.id === place.topicId)
+    setSheet(cur => ({ ...cur, title, subject_id: place.subjectId, topic_id: place.topicId || null }))
+    setMeta({ subject: subject?.name || '', topic: topic ? { id: topic.id, title: topic.title } : null })
+    setPlace(null)
+    notifySummariesChanged()
+  }
 
   useEffect(() => {
     let alive = true
@@ -77,6 +110,9 @@ export default function SummaryReader({ id, onClose, onStartQuiz }) {
                 <Sparkles size={14} /> Abfragen
               </button>
             )}
+            <button type="button" className={`btn btn-sm btn-ghost ${place ? 'on' : ''}`} onClick={openPlace} disabled={!sheet} aria-expanded={!!place}>
+              <FolderInput size={14} /> Einordnen
+            </button>
             <button type="button" className="btn btn-sm btn-ghost" onClick={() => window.print()} disabled={!sheet}>
               <Printer size={14} /> Drucken
             </button>
@@ -92,6 +128,34 @@ export default function SummaryReader({ id, onClose, onStartQuiz }) {
 
         {sheet && (
           <>
+            {place && (
+              <form className="summary-place" onSubmit={savePlace}>
+                <label>
+                  <span>Titel</span>
+                  <input value={place.title} maxLength={120} onChange={e => setPlace(p => ({ ...p, title: e.target.value }))} />
+                </label>
+                <label>
+                  <span>Fach</span>
+                  <select value={place.subjectId} onChange={e => setPlace(p => ({ ...p, subjectId: e.target.value, topicId: '' }))}>
+                    {options.subjects.map(x => <option key={x.id} value={x.id}>{x.name}</option>)}
+                  </select>
+                </label>
+                <label>
+                  <span>Thema</span>
+                  <select value={place.topicId} onChange={e => setPlace(p => ({ ...p, topicId: e.target.value }))}>
+                    <option value="">Ohne Thema</option>
+                    {options.topics.filter(x => x.subject_id === place.subjectId).map(x => (
+                      <option key={x.id} value={x.id}>{x.category ? `${x.category} · ` : ''}{x.title}</option>
+                    ))}
+                  </select>
+                </label>
+                <div className="summary-place-actions">
+                  <button type="button" className="btn btn-sm btn-ghost" onClick={() => setPlace(null)}>Abbrechen</button>
+                  <button type="submit" className="btn btn-sm btn-primary" disabled={saving || !place.title.trim()}>{saving ? 'Speichert …' : 'Speichern'}</button>
+                </div>
+                <p className="summary-place-hint">Mit Thema fliesst die Zusammenfassung in die Abfragen zu diesem Thema ein.</p>
+              </form>
+            )}
             <header className="summary-head">
               <p className="summary-crumbs">
                 {meta.subject}{meta.topic && meta.topic.title !== sheet.title ? <> · {meta.topic.title}</> : null}

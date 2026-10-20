@@ -71,7 +71,7 @@ export async function loadSummaries(userId) {
 
 export async function loadSummary(id) {
   const { data } = await supabase.from('summaries')
-    .select('id, title, subject_id, topic_id, source, content, created_at')
+    .select('id, user_id, title, subject_id, topic_id, source, content, created_at')
     .eq('id', id).maybeSingle()
   return data
 }
